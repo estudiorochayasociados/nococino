@@ -1,0 +1,44 @@
+1) Metodos de Pago
+-----------------------------------------------
+0-Transferencia Bancaria
+1-Coordinar con vendedor
+2-Tarjeta de crédito o débito
+
+-----------------------------------------------
+2) Login/Registro
+-----------------------------------------------
+nav.inc.php
+En este archivo esta el formulario de login y registro que aparece en la botonera.
+
+-----------------------------------------------
+3) Crear Empresa
+-----------------------------------------------
+Para crear la empresa se divide la creación en 3 pasos y cada paso redirige al siguiente:
+Paso 1 - crear_empresa.php 
+- Se crea el registro en la base de datos con datos básicos y se almacena el cod_usuario para la relación.
+Paso 2 - crear_empresa_paso2.php 
+- Se actualiza el registro añadiendo datos de ubicación.
+Paso 3 - crear_empresa_paso3.php 
+- Se actualiza el registro añadiendo logo y fotos de galería. Al terminar muestra botón para crear menú.
+
+------------------------------------------------
+4) Crear Menú
+------------------------------------------------
+crear_menu.php
+En este archivo se crea el registro de un menú.
+El menú almacena el cod_empresa para estar relacionado a la empresa, que a su vez la empresa está relacionada al usuario.
+
+Los campos variantes y adicionales (tienen el mismo funcionamiento):
+- Variantes se divide en variante1[] y variante2[]
+- Adicionales se divide en adicional1[] y adicional2[]
+- variante1[] almacena los precios de variante2[]
+- adicional1[] almacena los precios de adicional2[]
+- variante2[] y adicional2[] almacenan detalles
+
+Hay 3 scripts en este archivo:
+- Script para arrastrar imagenes.
+- Script para mostrar vista previa de la imagen cargada.
+- Script para que el usuario genere nuevos campos.
+
+--------------------------------------------------
+Localidades select: index,panel,crear_empresa_paso2
