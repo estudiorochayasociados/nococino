@@ -41,9 +41,11 @@
                                     <?php if ($_SESSION["usuarios"]["vendedor"] == 1): ?>
                                         <li><a href="<?= URL ?>/panel#seccion-1">Empresa</a></li>
                                         <li class="hidden-plan1"><a href="<?= URL ?>/panel#seccion-2">Menús</a></li>
+                                        <li><a href="<?= URL ?>/pedidosEmpresa">Pedidos</a></li>
                                         <li><a href="<?= URL ?>/panel#seccion-3">Perfil</a></li>
                                         <li><a href="<?= URL ?>/logout">Salir</a></li>
                                     <?php else: ?>
+                                        <li><a href="<?= URL ?>/pedidosUsuario">Pedidos</a></li>
                                         <li><a href="<?= URL ?>/panel#seccion-3">Perfil</a></li>
                                         <li><a href="<?= URL ?>/logout">Salir</a></li>
                                     <?php endif; ?>

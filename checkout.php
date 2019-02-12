@@ -12,8 +12,9 @@ $template->themeInit();
 $pedidos = new Clases\Pedidos();
 $carrito = new Clases\Carrito();
 $usuarios = new Clases\Usuarios();
+$productos = new Clases\Productos();
 
-$monto = $funciones->antihack_mysqli(isset($_POST['monto']) ? $_POST['monto'] : '');
+$monto = 'Paga con: '.$funciones->antihack_mysqli(isset($_POST['monto']) ? $_POST['monto'] : '');
 $cod_pedido = $_SESSION["cod_pedido"];
 $tipo_pedido = isset($_GET["tipo_pedido"]) ? $_GET["tipo_pedido"] : '1';
 
@@ -34,15 +35,34 @@ if (is_array($pedido)):
 endif;
 
 foreach ($carro as $carroItem):
+
+    $productos->set("cod",$carroItem["id"]);
+    $productosData = $productos->view();
+    if($productosData){
+        $cod_empresa = $productosData["cod_empresa"];
+    }
+
+    if(empty($carroItem["opciones"])){
+        $opciones = '';
+    }else{
+        $opciones = '|||'.serialize($carroItem["opciones"]);
+    }
+    if($carroItem["id"] == "Envio-Seleccion"){
+        $monto = "Envio-Seleccion";
+    }else{
+        $monto = 'Paga con: '.$funciones->antihack_mysqli(isset($_POST['monto']) ? $_POST['monto'] : '');
+    }
+
     $pedidos->set("cod", $cod_pedido);
-    $pedidos->set("producto", $carroItem["titulo"].'|||'.serialize($carroItem["opciones"]));
+    $pedidos->set("producto", $carroItem["titulo"].$opciones);
     $pedidos->set("cantidad", $carroItem["cantidad"]);
     $pedidos->set("precio", $carroItem["precio"]);
     $pedidos->set("precioAdicional", $carroItem["precioAdicional"]);
     $pedidos->set("estado", 0);
     $pedidos->set("tipo", $tipo_pedido);
     $pedidos->set("usuario", $usuarioSesion["cod"]);
-    $pedidos->set("detalle", "Paga con: ".$monto);
+    $pedidos->set("empresa", $cod_empresa);
+    $pedidos->set("detalle", $monto);
     $pedidos->set("fecha", $fecha);
     $pedidos->add();
 endforeach;

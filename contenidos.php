@@ -17,6 +17,7 @@ $contenido = $contenidos->view();
          <div id="subheader">
             <div id="sub_content">
                 <h1><?= ucwords(strtolower($contenido["cod"])) ?></h1>
+                <p>Queremos que tengas al instante toda la guía gastronómica de tu ciudad</p>
             </div>
         </div>
     </section>

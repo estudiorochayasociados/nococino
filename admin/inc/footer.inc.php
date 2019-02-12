@@ -6,4 +6,30 @@ echo '<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstr
 echo '<script src="'.URL.'/ckeditor/ckeditor.js"></script>';
 echo '<script src="'.URL.'/ckeditor/lang/es.js"></script>';
 echo '<script src="'.URL.'/js/script.js"></script>';
+echo '<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>';
 ?>
+
+
+<script>
+    $("#provincia").change(function () {
+        $("#provincia option:selected").each(function () {
+            elegido = $(this).val();
+            $.ajax({
+                type: "GET",
+                url: "<?=URLSITE ?>/assets/inc/localidades.inc.php",
+                data: "elegido=" + elegido,
+                dataType: "html",
+                success: function (data) {
+                    $('#localidad option').remove();
+                    var substr = data.split(';');
+                    for (var i = 0; i < substr.length; i++) {
+                        var value = substr[i];
+                        $("#localidad").append(
+                            $("<option></option>").attr("value", value).text(value)
+                        );
+                    }
+                }
+            });
+        });
+    })
+</script>

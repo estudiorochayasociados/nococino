@@ -33,7 +33,6 @@ class Envios
     {
         $sql   = "INSERT INTO `envios`(`cod`, `titulo`, `precio`, `cod_empresa`) VALUES ('{$this->cod}', '{$this->titulo}', '{$this->precio}', '{$this->cod_empresa}')";
         $query = $this->con->sql($sql);
-        echo $query;
         return $query;
     }
 

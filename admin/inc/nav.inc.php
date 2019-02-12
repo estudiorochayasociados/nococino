@@ -1,11 +1,11 @@
 <?php
-$pages = ["contenidos", "configuracion", "categorias","usuarios"];
-$subpages = ["videos"];
+$pages = ["contenidos", "configuracion", "categorias","usuarios","empresas","multimedia"];
+$subpages = ["banners"];
 ?>
 <nav class="navbar navbar-expand-lg navbar-light bg-light mb-30">
     <div class="col-md-12">
         <a class="navbar-brand" href="#">
-            AdWeb
+            NoCocino | Administrador Web
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon">
@@ -37,17 +37,8 @@ $subpages = ["videos"];
                         Multimedia
                     </a>
                     <div class="dropdown-menu">
-                        <a class="dropdown-item <?php if (!in_array('novedades', $subpages)) {echo 'd-none';}?>" href="<?=URL?>/index.php?op=novedades&accion=ver">
-                            Novedades
-                        </a>
-                        <a class="dropdown-item <?php if (!in_array('videos', $subpages)) {echo 'd-none';}?>" href="<?=URL?>/index.php?op=videos&accion=ver">
-                            Videos
-                        </a>
-                        <a class="dropdown-item <?php if (!in_array('sliders', $subpages)) {echo 'd-none';}?>" href="<?=URL?>/index.php?op=sliders&accion=ver">
-                            Sliders
-                        </a>
-                        <a class="dropdown-item <?php if (!in_array('galerias', $subpages)) {echo 'd-none';}?>" href="<?=URL?>/index.php?op=galerias&accion=ver">
-                            Galerias
+                        <a class="dropdown-item <?php if (!in_array('banners', $subpages)) {echo 'd-none';}?>" href="<?=URL?>/index.php?op=banners&accion=ver">
+                            Banners
                         </a>
                     </div>
                 </li>
@@ -106,6 +97,16 @@ $subpages = ["videos"];
                         </a>
                         <a class="dropdown-item" href="<?=URL?>/index.php?op=usuarios&accion=agregar">
                             Agregar Usuarios
+                        </a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown <?php if (!in_array('empresas', $pages)) {echo 'd-none';}?>">
+                    <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">
+                        Restaurantes
+                    </a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="<?=URL?>/index.php?op=empresas&accion=ver">
+                            Ver Restaurantes
                         </a>
                     </div>
                 </li>

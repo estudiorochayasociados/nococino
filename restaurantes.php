@@ -10,10 +10,37 @@ $template->set("favicon", LOGO);
 $template->themeInit();
 //Clases
 $empresa = new Clases\Empresas();
+$imagenesBanners = new Clases\Imagenes();
 $imagenesEmpresa = new Clases\Imagenes();
 $categorias = new Clases\Categorias();
 $productos = new Clases\Productos();
 $usuarioJefe = new Clases\Usuarios();
+$banners = new Clases\Banner();
+
+//Banners
+$categoriasArray = $categorias->list(array("area = 'banners'"), '', '');
+foreach ($categoriasArray as $val) {
+    if ($val['titulo'] == 'Filtro') {
+        $banners->set("categoria", $val['cod']);
+        $banFiltro = $banners->listForCategory();
+    }
+    if ($val['titulo'] == 'Superior') {
+        $banners->set("categoria", $val['cod']);
+        $banSuperior = $banners->listForCategory();
+    }
+    if ($val['titulo'] == 'Intercalado') {
+        $banners->set("categoria", $val['cod']);
+        $banIntercalado = $banners->listForCategory();
+    }
+    if ($val['titulo'] == 'Mobile Superior') {
+        $banners->set("categoria", $val['cod']);
+        $banMobileSup = $banners->listForCategory();
+    }
+    if ($val['titulo'] == 'Mobile Inferior') {
+        $banners->set("categoria", $val['cod']);
+        $banMobileInf = $banners->listForCategory();
+    }
+}
 
 $ubicacionUsuario = isset($_GET["ubicacion"]) ? $_GET["ubicacion"] : '';
 if ($ubicacionUsuario != ''):
@@ -24,6 +51,8 @@ if ($ubicacionUsuario != ''):
 endif;
 
 $categoriaGET = isset($_GET["categoria"]) ? $_GET["categoria"] : 0;
+$envioGET = isset($_GET["envio"]) ? $_GET["envio"] : 2;
+
 $filterEmpresa = '';
 
 if ($categoriaGET != 0):
@@ -55,19 +84,30 @@ if ($categoriaGET != 0):
     endif;
 endif;
 
+if ($envioGET != 2):
+    if ($categoriaGET == 0):
+        unset($filterEmpresa);
+    endif;
+    if ($envioGET == 1):
+        $filterEmpresa[] = "delivery = '" . $envioGET . "'";
+    else:
+        $filterEmpresa = '';
+    endif;
+endif;
+
 $productosCategorias = $productos->list(array("categoria != '' GROUP BY categoria"), "", "");
-if($productosCategorias){
+if ($productosCategorias) {
     foreach ($productosCategorias as $key => $value):
         $categoriasQuery[] = "cod = '" . $value['categoria'] . "'";
     endforeach;
     $filterCategorias = array(implode(" OR ", $categoriasQuery));
     $categoriasArray = $categorias->list($filterCategorias, "titulo asc", "");
-}else{
-    $categoriasArray = array(0=>array("cod"=>"","titulo"=>""));
+} else {
+    $categoriasArray = array(0 => array("cod" => "", "titulo" => ""));
 }
 
 $pagina = isset($_GET["pagina"]) ? $_GET["pagina"] : '0';
-$cantidad = 14;
+$cantidad = 16;
 
 if ($pagina > 0) {
     $pagina = $pagina - 1;
@@ -111,15 +151,120 @@ $numeroPaginas = $empresa->paginador($filterEmpresa, $cantidad);
     </div>
 </div><!-- Position -->
 
+<!-- banner superior -->
+<div class="container hidden-xs hidden-sm">
+    <?php
+    shuffle($banSuperior);
+    $imagenesBanners->set("cod", $banSuperior[0]["cod"]);
+    $imagenesBannersData = $imagenesBanners->view();
+    echo '<img width="100%" src="' . $imagenesBannersData['ruta'] . '" /><br/><br/>';
+    ?>
+</div>
+<!-- banner mobile superior -->
+<div class="container hidden-md hidden-lg">
+    <?php
+    shuffle($banMobileSup);
+    $imagenesBanners->set("cod", $banMobileSup[0]["cod"]);
+    $imagenesBannersData = $imagenesBanners->view();
+    echo '<img width="100%" src="' . $imagenesBannersData['ruta'] . '" /><br/><br/>';
+    ?>
+</div>
+
 <!-- Content ================================================== -->
 <div class="container margin_60_35">
     <div class="row">
 
         <div class="col-md-3">
             <div id="filters_col">
+                <?php
+                if ($categoriaGET != 0) {
+                    $categoriaExp = explode(",", $_GET['categoria']);
+                    foreach ($categoriaExp as $item) {
+                        $categoriasTemp[] = "cod = '" . $item . "'";
+                    }
+                    $categoriasTemp = implode(" OR ", $categoriasTemp);
+
+                    $categoriasEliminar = $categorias->list(array($categoriasTemp), "", "");
+                    ?>
+                    <ul class="filterE">
+                        <?php
+                        if (isset($_POST["eliminar"])) {
+                            $keyEliminar = $_POST["keyEliminar"];
+                            unset($categoriasEliminar[$keyEliminar]);
+                            $urlNueva = $funcion->eliminar_get(CANONICAL, 'categoria');
+                            foreach ($categoriasEliminar as $item) {
+                                $categoriasRestantes[] = $item["cod"];
+                            }
+                            $anidadorNuevo = $funcion->anidador(CANONICAL, "categoria", count($_GET));
+                            $categoriasRestantesImp = implode(",", $categoriasRestantes);
+                            if (!empty($categoriasRestantesImp)) {
+                                $funcion->headerMove($urlNueva . $anidadorNuevo . "categoria=" . $categoriasRestantesImp);
+                            } else {
+                                $funcion->headerMove($urlNueva);
+                            }
+                        }
+                        foreach ($categoriasEliminar as $key => $item) { ?>
+                            <form method="post">
+                                <li class="fs16 mb-10">
+                                    <input name="keyEliminar" type="hidden" value="<?= $key ?>">
+                                    <button class="btn_filter" name="eliminar" type="submit"><i class="icon-cancel-circled-1"></i> <?= $item['titulo'] ?></button>
+                                </li>
+                            </form>
+                        <?php } ?>
+                    </ul>
+                <?php } ?>
+
+                <?php if ($envioGET != 2) { ?>
+                    <ul class="filterE">
+                        <?php if ($envioGET == 1) {
+                            $envioEliminar = "Comercios con delivery";
+                        }
+                        if ($envioGET == 0) {
+                            $envioEliminar = "Todos los comercios";
+                        }
+
+                        if (isset($_POST["eliminar2"])) {
+                            $urlNuevaEnvio = $funcion->eliminar_get(CANONICAL, 'envio');
+                            $funcion->headerMove($urlNuevaEnvio);
+                        }
+                        ?>
+                        <form method="post">
+                            <li class="fs16 mb-10">
+                                <input name="keyEliminar" type="hidden" value="<?= $key ?>">
+                                <button class="btn_filter" name="eliminar2" type="submit"><i class="icon-cancel-circled-1"></i> <?= $envioEliminar ?></button>
+                            </li>
+                        </form>
+                        <?php ?>
+                    </ul>
+                <?php } ?>
+
                 <a data-toggle="collapse" href="#collapseFilters" aria-expanded="false" aria-controls="collapseFilters"
                    id="filters_col_bt">Filtros <i class="icon-plus-1 pull-right"></i></a>
                 <div class="collapse" id="collapseFilters">
+                    <div class="filter_type">
+                        <h6 class="fs18"><b>Delivery</b></h6>
+                        <ul>
+                            <?php
+                            $anidador = $funcion->anidador(CANONICAL, "envio", count($_GET));
+                            if (isset($_GET['envio'])):
+                                $urlEnvio = $funcion->eliminar_get(CANONICAL, 'envio');
+                            else:
+                                $urlEnvio = CANONICAL;
+                            endif;
+                            ?>
+                            <li class="fs16 mb-10">
+                                <a href="<?= $urlEnvio . $anidador ?>envio=1"
+                                   class="categoriasLink"><i class="icon-truck-1"></i> Comercios con delivery
+                                </a>
+                            </li>
+                            <li class="fs16 mb-10">
+                                <a href="<?= $urlEnvio . $anidador ?>envio=0"
+                                   class="categoriasLink"><i class="icon-shop-1"></i> Todos los comercios
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="clearfix"></div>
                     <div class="filter_type">
                         <h6 class="fs18"><b>¿Qué te gustaría comer?</b></h6>
                         <ul>
@@ -134,7 +279,7 @@ $numeroPaginas = $empresa->paginador($filterEmpresa, $cantidad);
                                 endif; ?>
                                 <li class="fs16 mb-10">
                                     <a href="<?= $urlFiltro . $anidador ?>categoria=<?= $categoriaNueva ?>"
-                                       class="categoriasLink"><?= $value['titulo'] ?>
+                                       class="categoriasLink"><i class="icon-plus-squared-small"></i> <?= $value['titulo'] ?>
                                     </a>
                                 </li>
                             <?php endforeach; ?>
@@ -142,11 +287,30 @@ $numeroPaginas = $empresa->paginador($filterEmpresa, $cantidad);
                     </div>
                 </div><!--End collapse -->
             </div><!--End filters col-->
+            <div class="hidden-xs hidden-sm"><!-- banner superior -->
+                <?php
+                shuffle($banFiltro);
+                for ($i = 0; $i < 2; $i++) {
+                    $imagenesBanners->set("cod", $banFiltro[$i]["cod"]);
+                    $imagenesBannersData = $imagenesBanners->view();
+                    echo '<img width="100%" src="' . $imagenesBannersData['ruta'] . '" /><br/><br/>';
+                } ?>
+            </div>
         </div><!--End col-md -->
 
         <div class="col-md-9">
 
-            <?php foreach ($empresaArray as $key => $value):
+            <?php $i = 0;
+            foreach ($empresaArray as $key => $value):
+                echo '<div class="hidden-xs hidden-sm">';
+                if ($i != 0 && $i % 4 == 0) {
+                    shuffle($banIntercalado);
+                    $imagenesBanners->set("cod", $banIntercalado[0]["cod"]);
+                    $imagenesBannersData = $imagenesBanners->view();
+                    echo '<img width="100%" src="' . $imagenesBannersData['ruta'] . '" /><br/><br/>';
+                }
+                echo '</div>';
+                $i++;
                 $usuarioJefe->set("cod", $value['cod_usuario']);
                 $usuarioJefeData = $usuarioJefe->view();
 
@@ -171,7 +335,7 @@ $numeroPaginas = $empresa->paginador($filterEmpresa, $cantidad);
                                 <div class="rating">
 
                                 </div>
-                                <h3 class="mt-10"><?= mb_strtoupper($value['titulo']) ?></h3>
+                                <h3 class="mt-10"><?= $value['titulo'] ?></h3>
                                 <?php if (!empty($categoriasMasUsadas)) { ?>
                                     <div class="type mt-10">
                                         <i class="icon-food"></i>
@@ -244,6 +408,16 @@ $numeroPaginas = $empresa->paginador($filterEmpresa, $cantidad);
     </div><!-- End row -->
 </div><!-- End container -->
 <!-- End Content =============================================== -->
+
+<!-- banner mobile inferior -->
+<div class="container hidden-md hidden-lg">
+    <?php
+    shuffle($banMobileInf);
+    $imagenesBanners->set("cod", $banMobileInf[0]["cod"]);
+    $imagenesBannersData = $imagenesBanners->view();
+    echo '<img width="100%" src="' . $imagenesBannersData['ruta'] . '" /><br/><br/>';
+    ?>
+</div>
 
 <?php $template->themeEnd() ?>
 

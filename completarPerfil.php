@@ -68,6 +68,7 @@ $usuarioData = $usuario->view();
                         $usuario->set("nombre", $nombre);
                         $usuario->set("apellido", $apellido);
                         $usuario->set("telefono", $telefono);
+                        $usuario->set("email", $email);
                         $usuario->set("password", $password);
                         $usuario->set("postal", $postal);
                         $usuario->set("provincia", $provincia);

@@ -27,6 +27,8 @@ class Empresas
     public $description;
     public $fecha;
     public $cod_usuario;
+    public $tiempoEntrega;
+    public $delivery;
     private $con;
 
 
@@ -48,7 +50,7 @@ class Empresas
 
     public function add()
     {
-        $sql   = "INSERT INTO `empresas`(`cod`, `titulo`, `telefono`, `email`, `provincia`, `ciudad`, `barrio`, `direccion`, `postal`, `coordenadas`, `desarrollo`, `redes`, `logo`, `portada`, `categoria`, `subcategoria`, `keywords`, `description`, `fecha`, `cod_usuario`) VALUES ('{$this->cod}', '{$this->titulo}', '{$this->telefono}', '{$this->email}', '{$this->provincia}', '{$this->ciudad}', '{$this->barrio}', '{$this->direccion}', '{$this->postal}', '{$this->coordenadas}', '{$this->desarrollo}', '{$this->redes}','{$this->logo}','{$this->portada}', '{$this->categoria}', '{$this->subcategoria}', '{$this->keywords}', '{$this->description}', '{$this->fecha}', '{$this->cod_usuario}')";
+        $sql   = "INSERT INTO `empresas`(`cod`, `titulo`, `telefono`, `email`, `provincia`, `ciudad`, `barrio`, `direccion`, `postal`, `coordenadas`, `desarrollo`, `redes`, `logo`, `portada`, `categoria`, `subcategoria`, `keywords`, `description`, `fecha`, `cod_usuario`, `tiempoEntrega`, `delivery`) VALUES ('{$this->cod}', '{$this->titulo}', '{$this->telefono}', '{$this->email}', '{$this->provincia}', '{$this->ciudad}', '{$this->barrio}', '{$this->direccion}', '{$this->postal}', '{$this->coordenadas}', '{$this->desarrollo}', '{$this->redes}','{$this->logo}','{$this->portada}', '{$this->categoria}', '{$this->subcategoria}', '{$this->keywords}', '{$this->description}', '{$this->fecha}', '{$this->cod_usuario}', '{$this->tiempoEntrega}', '{$this->delivery}')";
         $query = $this->con->sql($sql);
         return $query;
     }
@@ -74,7 +76,9 @@ class Empresas
         `subcategoria` = '{$this->subcategoria}',
         `keywords` = '{$this->keywords}',
         `description` = '{$this->description}',
-        `fecha` = '{$this->fecha}'
+        `fecha` = '{$this->fecha}',
+        `tiempoEntrega` = '{$this->tiempoEntrega}',
+        `delivery` = '{$this->delivery}'
         WHERE `id`='{$this->id}'";
         $query = $this->con->sql($sql);
         return $query;
@@ -138,7 +142,7 @@ class Empresas
         $contar = $this->con->sqlReturn($sql);
         $total = mysqli_num_rows($contar);
         $totalPaginas = $total / $cantidad;
-        return floor($totalPaginas);       
+        return ceil($totalPaginas);
     }
 
 }

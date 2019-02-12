@@ -81,7 +81,7 @@ endif;
                                         <strong class="pull-right">$<?= $carroItem['precio'] * $carroItem['cantidad']; ?></strong>
                                     </td>
                                 </tr>
-                                <?php if (!empty($carroItem['opciones']) && !empty($variantesMostrarCarrito[0])):
+                                <?php if (!empty($carroItem['opciones']) && !empty($variantesMostrarCarrito[1])):
                                 $valor = explode(",", $variantesMostrarCarrito); ?>
                                 <tr>
                                     <td>
@@ -93,7 +93,7 @@ endif;
                                 </tr>
                             <?php endif;
                                 if (!empty($carroItem['opciones']) && is_array($adicionalesMostrarCarrito) && count($adicionalesMostrarCarrito) > 1):
-                                    foreach ($variantesMostrarCarrito as $value):
+                                    foreach ($adicionalesMostrarCarrito as $value):
                                         $value = explode(",", $value); ?>
                                         <tr>
                                             <td>
@@ -125,11 +125,15 @@ endif;
                             <td>
                                 Envío: <?= $carro[$carroEnvio]["titulo"] ?>
                                 <a href="#" class="tooltip-1" data-placement="top" title=""
-                                            data-original-title="Tiempo estimado: 30 min."><i
+                                   data-original-title="Tiempo estimado: 30 min."><i
                                             class="icon_question_alt"></i></a>
                             </td>
                             <td>
-                                <strong class="pull-right"><?php if($carro[$carroEnvio]["precio"] == 0){echo 'Gratis';}else{echo '$'.$carro[$carroEnvio]["precio"];} ?></strong>
+                                <strong class="pull-right"><?php if ($carro[$carroEnvio]["precio"] == 0) {
+                                        echo 'Gratis';
+                                    } else {
+                                        echo '$' . $carro[$carroEnvio]["precio"];
+                                    } ?></strong>
                             </td>
                         </tr>
                         <tr>

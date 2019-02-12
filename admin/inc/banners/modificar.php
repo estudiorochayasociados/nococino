@@ -10,7 +10,7 @@ $banners->set("cod", $cod);
 $banner = $banners->view();
 
 $categorias = new Clases\Categorias();
-$data = $categorias->list(array("area = 'banners'"));
+$data = $categorias->list(array("area = 'banners'"),'','');
 
 $imagenes->set("cod", $banner["cod"]);
 $imagenes->set("link", "banners&accion=modificar");
@@ -50,7 +50,7 @@ if (isset($_POST["agregar"])) {
             $zebra->enlarge_smaller_images = true;
             $zebra->preserve_time = true;
 
-            if ($zebra->resize(800, 700, ZEBRA_IMAGE_NOT_BOXED)) {
+            if ($zebra->resize(0, 0, ZEBRA_IMAGE_NOT_BOXED)) {
                 unlink($destinoFinal);
             }
 
@@ -73,11 +73,11 @@ if (isset($_POST["agregar"])) {
     </h4>
     <hr/>
     <form method="post" class="row" enctype="multipart/form-data">
-        <label class="col-md-4">
+        <label class="col-md-6">
             Nombre:<br/>
             <input type="text" value="<?=$banner['nombre']?>" name="nombre">
         </label>
-        <label class="col-md-4">
+        <label class="col-md-6">
             Categoría:<br/>
             <select name="categoria">
                <?php

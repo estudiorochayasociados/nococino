@@ -49,23 +49,28 @@ Author URI: http://themeforest.net/user/Ansonika/
 /*----------------------- SLIDER RESTAURANTE ---------------------------------*/
 
 /*-------------PLANES-----------*/
-.restaurantes-plan1{
+.restaurantes-plan1 {
     display: none !important;
 }
-.a_restaurante-plan3{
+
+.a_restaurante-plan3 {
     display: none !important;
 }
-.b_restaurante-plan2{
+
+.b_restaurante-plan2 {
     display: none !important;
 }
-.c_restaurante-plan2{
+
+.c_restaurante-plan2 {
     display: none !important;
 }
+
 /*-------------PLANES-----------*/
 
 .gallery-area {
     position: relative;
 }
+
 .gallery-area .single-item-area .img-box-area {
     display: block;
     overflow: hidden;
@@ -73,10 +78,12 @@ Author URI: http://themeforest.net/user/Ansonika/
     border: 1px solid #e5e5e5;
     padding: 8px;
 }
+
 .gallery-area .single-item-area .img-box-area img {
     position: relative;
     width: 100%;
 }
+
 .single-item-area .img-box-area .overlay .box .content a i {
     border: 2px solid #fff;
     text-align: center;
@@ -90,15 +97,18 @@ Author URI: http://themeforest.net/user/Ansonika/
     margin-bottom: 15px;
     border-radius: 0;
 }
+
 .single-item-area:hover .img-box-area .overlay {
     -webkit-transform: scale(1);
     transform: scale(1);
 }
+
 .overlay .box .content {
     display: table-cell;
     text-align: center;
     vertical-align: middle;
 }
+
 .overlay {
     width: 96%;
     height: 96%;
@@ -111,52 +121,64 @@ Author URI: http://themeforest.net/user/Ansonika/
     -webkit-transition: all 0.7s ease;
     transition: all 0.7s ease;
 }
+
 .overlay .box {
     display: table;
     height: 100%;
     width: 100%;
 }
+
 .gallery-area h5 {
     color: #fff;
 }
+
 .gallery-area .owl-dots {
     display: none !important;
 }
+
 .gallery-area .owl-theme .owl-controls {
     display: block;
     position: relative;
-    margin-top:10px;
+    margin-top: 10px;
     text-align: center;
 }
+
 .gallery-area .owl-prev span, .gallery-area .owl-next span {
     color: #848484;
 }
+
 .gallery-area .owl-prev:hover span, .gallery-area .owl-next:hover span {
     color: #fff;
     transition: all 500ms ease;
 }
+
 .section-padding {
     padding: 80px 0px 80px 0px;
 }
+
 .centered {
     text-align: center;
 }
+
 .section-title h2 {
     position: relative;
     font-weight: 700;
-    font-size:40px;
+    font-size: 40px;
     margin-bottom: 2px;
 }
+
 .title-text {
     position: relative;
     margin-bottom: 68px;
 }
+
 .title-text p {
     font-size: 16px;
     max-width: 650px;
     color: #444;
-    margin:0 auto;
+    margin: 0 auto;
 }
+
 .title-text:before {
     position: absolute;
     content: '';
@@ -169,13 +191,14 @@ Author URI: http://themeforest.net/user/Ansonika/
     margin: auto;
     bottom: -18px;
 }
-@media (min-width:1200px) {
+
+@media (min-width: 1200px) {
     .container {
         padding: 0px 0px;
     }
 }
 
-.w_td100{
+.w_td100 {
     width: 100%;
 }
 
@@ -321,7 +344,7 @@ a:hover, a:focus {
 
 .categoriasLink:hover {
     cursor: pointer;
-    text-decoration: underline;
+    text-decoration: none;
 }
 
 hr.more_margin {
@@ -336,6 +359,27 @@ hr.styled {
     border: 0;
     border-top: 1px solid #ddd;
     border-bottom: 1px solid #fff;
+}
+
+
+.filterE {
+    padding-left: 0px !important;
+}
+
+.filterE li {
+    list-style: none;
+}
+
+.btn_filter {
+    border: none;
+    font-size: inherit;
+    color: #4c4c4c;
+    background: #ffffff;
+    cursor: pointer;
+    font-size: 12px;
+    text-transform: uppercase;
+    font-weight: 600;
+    text-align: center;
 }
 
 .MasCampos i {
@@ -595,8 +639,8 @@ header.sticky {
 
 @media screen and (max-width: 992px) {
     header.sticky {
-        height:75px;
-        
+        height: 75px;
+
         box-shadow: 0px 2px 10px -2px rgba(0, 0, 0, 0);
     }
 
@@ -609,6 +653,17 @@ header.sticky {
     width: 100%;
     height: 470px;
     background: rgba(0, 0, 0, .7);
+}
+
+#sub_content {
+    padding-top: 70px;
+}
+
+#sub_content h1 {
+    font-size: 35px;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: #fff;
 }
 
 #home #subheader {
@@ -1041,8 +1096,7 @@ video {
     font-family: inherit;
     font-size: inherit;
     color: #fff;
-    background: none;
-    border: 2px solid #fff;
+    background: #EAAF41;
     cursor: pointer;
     padding: 15px 30px;
     outline: none;
@@ -1279,6 +1333,11 @@ a.strip_list:hover h3 {
     vertical-align: middle;
 }
 
+.thead-dark {
+    background: #3a3a3a;
+    color: #fff;
+}
+
 .ribbon_1 {
     position: absolute;
     text-indent: -9999px;
@@ -1291,10 +1350,11 @@ a.strip_list:hover h3 {
 }
 
 /* 2.3 Restaurant menu*/
-.car_d{
+.car_d {
     right: 0;
     top: 150px;
 }
+
 .box_style_1 {
     padding: 10px;
     background: #fff;
@@ -1477,13 +1537,6 @@ ul#cat_nav li a:hover, ul#cat_nav li a.active {
 #sub_content #thumb img {
     width: 120px;
     height: auto;
-}
-
-#sub_content h1 {
-    margin: 0 0 10px 0;
-    font-size: 60px;
-    font-weight: 300;
-    color: #fff;
 }
 
 .rating {
@@ -2516,11 +2569,11 @@ footer .form-group {
 
 .panel-title a {
     display: block;
-    color: #444;
+    color: #fff;
 }
 
 .panel-default > .panel-heading {
-    background-color: #f9f9f9;
+    background-color: #8ba14f;
     padding: 20px;
     border-bottom: 1px solid #ddd;
 }
@@ -3514,17 +3567,142 @@ ul.plan-features {
 
 .sticky .main-menu {
     position: relative;
-    top: 16px;
 }
 
 .sticky img {
-    width:80px !important;
+    width: 50px !important;
 }
 
 .sticky .main-menu {
-    margin:0 !important;
+    margin: 0 !important;
 }
 
-.fs9{ font-size:9px !important;} .fs10{ font-size:10px !important;} .fs11{ font-size:11px !important;} .fs12{ font-size:12px !important;} .fs13{ font-size:13px !important;} .fs14{ font-size:14px !important;} .fs15{ font-size:15px !important;} .fs16{ font-size:16px !important;} .fs17{ font-size:17px !important;} .fs18{ font-size:18px !important;} .fs19{ font-size:19px !important;} .fs20{ font-size:20px !important;} .fs21{ font-size:21px !important;} .fs22{ font-size:22px !important;} .fs23{ font-size:23px !important;} .fs24{ font-size:24px !important;} .fs25{ font-size:25px !important;} .fs26{ font-size:26px !important;} .fs27{ font-size:27px !important;} .fs28{ font-size:28px !important;} .fs29{ font-size:29px !important;} .fs30{ font-size:30px !important;} .fs31{ font-size:31px !important;} .fs32{ font-size:32px !important;} .fs33{ font-size:33px !important;} .fs34{ font-size:34px !important;} .fs35{ font-size:35px !important;} .fs36{ font-size:36px !important;} .fs37{ font-size:37px !important;} .fs38{ font-size:38px !important;} .fs39{ font-size:39px !important;} .fs40{ font-size:40px !important;}
+.fs9 {
+    font-size: 9px !important;
+}
+
+.fs10 {
+    font-size: 10px !important;
+}
+
+.fs11 {
+    font-size: 11px !important;
+}
+
+.fs12 {
+    font-size: 12px !important;
+}
+
+.fs13 {
+    font-size: 13px !important;
+}
+
+.fs14 {
+    font-size: 14px !important;
+}
+
+.fs15 {
+    font-size: 15px !important;
+}
+
+.fs16 {
+    font-size: 16px !important;
+}
+
+.fs17 {
+    font-size: 17px !important;
+}
+
+.fs18 {
+    font-size: 18px !important;
+}
+
+.fs19 {
+    font-size: 19px !important;
+}
+
+.fs20 {
+    font-size: 20px !important;
+}
+
+.fs21 {
+    font-size: 21px !important;
+}
+
+.fs22 {
+    font-size: 22px !important;
+}
+
+.fs23 {
+    font-size: 23px !important;
+}
+
+.fs24 {
+    font-size: 24px !important;
+}
+
+.fs25 {
+    font-size: 25px !important;
+}
+
+.fs26 {
+    font-size: 26px !important;
+}
+
+.fs27 {
+    font-size: 27px !important;
+}
+
+.fs28 {
+    font-size: 28px !important;
+}
+
+.fs29 {
+    font-size: 29px !important;
+}
+
+.fs30 {
+    font-size: 30px !important;
+}
+
+.fs31 {
+    font-size: 31px !important;
+}
+
+.fs32 {
+    font-size: 32px !important;
+}
+
+.fs33 {
+    font-size: 33px !important;
+}
+
+.fs34 {
+    font-size: 34px !important;
+}
+
+.fs35 {
+    font-size: 35px !important;
+}
+
+.fs36 {
+    font-size: 36px !important;
+}
+
+.fs37 {
+    font-size: 37px !important;
+}
+
+.fs38 {
+    font-size: 38px !important;
+}
+
+.fs39 {
+    font-size: 39px !important;
+}
+
+.fs40 {
+    font-size: 40px !important;
+}
 
 

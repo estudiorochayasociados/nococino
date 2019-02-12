@@ -22,6 +22,14 @@ $cod = isset($_GET["id"]) ? $_GET["id"] : '';
 $empresa->set("cod", $cod);
 $empresaData = $empresa->view();
 
+if(!isset($_SESSION["detectar_carrito"])){
+    $_SESSION["detectar_carrito"] = '';
+}
+if($_SESSION["detectar_carrito"] != '' && $_SESSION["detectar_carrito"] != $empresaData['cod']){
+    $_SESSION["detectar_carrito"] = '';
+    $carrito->destroy();
+}
+
 $filterEnvios = array("cod_empresa = '" . $empresaData['cod'] . "'");
 $enviosArray = $envio->list($filterEnvios, "", "");
 
@@ -67,14 +75,14 @@ if ($empresaData['portada'] == '') {
             <div id="sub_content">
                 <div id="thumb"><img src="<?= URL ?>/<?= $empresaData['logo'] ?>" alt=""></div>
                 <h1><?= ucwords($empresaData['titulo']) ?></h1>
-                <div><em>
+                <div class="text-uppercase"><em>
                         <?php foreach ($productosArrayCategoria as $key => $value):
                             $categorias->set("cod", $value['categoria']);
                             $categoriaData = $categorias->view();
-                            echo $categoriaData['titulo'] . '/';
+                            echo $categoriaData['titulo'] . ' / ';
                         endforeach; ?>
                     </em></div>
-                <div><i class="icon_pin"></i> <?= $empresaData['direccion'] ?>, <?= $empresaData['ciudad'] ?>
+                <div class="text-uppercase"><i class="icon_pin"></i> <?= $empresaData['direccion'] ?>, <?= $empresaData['ciudad'] ?>
                     , <?= $empresaData['provincia'] ?></div>
             </div><!-- End sub_content -->
         </div><!-- End subheader -->
@@ -146,6 +154,8 @@ if ($empresaData['portada'] == '') {
             <?php
             //$carrito->destroy();
             if (isset($_POST["enviarCarrito"])) {
+                $_SESSION["detectar_carrito"] = $empresaData['cod'];
+
                 $id = $funcion->antihack_mysqli(isset($_POST['cod']) ? $_POST['cod'] : '');
                 $cantidad = $funcion->antihack_mysqli(isset($_POST['cantidad']) ? $_POST['cantidad'] : '');
                 $titulo = $funcion->antihack_mysqli(isset($_POST['titulo']) ? $_POST['titulo'] : '');
@@ -179,6 +189,7 @@ if ($empresaData['portada'] == '') {
 
             //$carrito->destroy();
             if (isset($_POST["tipoEnvio"])) {
+                $_SESSION["detectar_carrito"] = $empresaData['cod'];
 
                 if ($carroEnvio != '' || $carroEnvio == 0) {
                     $carrito->delete($carroEnvio);
@@ -348,8 +359,8 @@ if ($empresaData['portada'] == '') {
                             <div class="row" id="options_2">
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                     <label>Envío</label>
-                                    <select name="tipoEnvio" class="form-control" onchange="this.form.submit();">
-                                        <option selected disabled>Seleccionar envío</option>
+                                    <select name="tipoEnvio" class="form-control" required onchange="this.form.submit();">
+                                        <option>Seleccionar envío</option>
                                         <?php foreach ($enviosArray as $key => $value) {
                                             $envioTitulo = $carro[$carroEnvio]["titulo"];
                                             $envioPrecio = $carro[$carroEnvio]["precio"];

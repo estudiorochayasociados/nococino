@@ -11,6 +11,8 @@ if (isset($_POST["agregar"])) {
     $usuarios->set("email", $funciones->antihack_mysqli(isset($_POST["email"]) ? $_POST["email"] : ''));
     $usuarios->set("password", $funciones->antihack_mysqli(isset($_POST["password"]) ? $_POST["password"] : ''));
     $usuarios->set("postal", $funciones->antihack_mysqli(isset($_POST["postal"]) ? $_POST["postal"] : ''));
+    $usuarios->set("direccion", $funciones->antihack_mysqli(isset($_POST["direccion"]) ? $_POST["direccion"] : ''));
+    $usuarios->set("barrio", $funciones->antihack_mysqli(isset($_POST["barrio"]) ? $_POST["barrio"] : ''));
     $usuarios->set("localidad", $funciones->antihack_mysqli(isset($_POST["localidad"]) ? $_POST["localidad"] : ''));
     $usuarios->set("provincia", $funciones->antihack_mysqli(isset($_POST["provincia"]) ? $_POST["provincia"] : ''));
     $usuarios->set("pais", $funciones->antihack_mysqli(isset($_POST["pais"]) ? $_POST["pais"] : ''));
@@ -50,24 +52,31 @@ if (isset($_POST["agregar"])) {
             <input type="text" name="email" />
         </label>
         <label class="col-md-4">
-            Password:<br/>
+            Contraseña:<br/>
             <input type="text" name="password" />
         </label>
         <label class="col-md-4">
-            Postal:<br/>
+            Código Postal:<br/>
             <input type="text" name="postal" />
         </label>
         <label class="col-md-4">
-            Localidad:<br/>
-            <input type="text" name="localidad" />
+            Dirección:<br/>
+            <input type="text" name="direccion" value="" />
         </label>
         <label class="col-md-4">
-            Provincia:<br/>
-            <input type="text" name="provincia" />
+            Barrio:<br/>
+            <input type="text" name="barrio" value="" />
         </label>
-        <label class="col-md-4">
-            Pais:<Br/>
-            <input type="text" name="pais" />
+        <label class="col-md-4">Provincia:<br/>
+            <select name="provincia" id="provincia" required>
+                <option value="" selected disabled>Provincia</option>
+                <?php $funciones->provincias() ?>
+            </select>
+        </label>
+        <label class="col-md-4">Localidad:<br/>
+            <select name="localidad" id="localidad" required>
+                <option value="" selected disabled>Localidad</option>
+            </select>
         </label>
         <label class="col-md-4">
             Telefono:<br/>
@@ -79,11 +88,20 @@ if (isset($_POST["agregar"])) {
         </label>
         <label class="col-md-2">
             Vendedor:<br/>
-            <input type="text" name="vendedor" />
+            <select name="vendedor">
+                <option selected disabled>Seleccionar</option>
+                <option value="1">Si</option>
+                <option value="0">No</option>
+            </select>
         </label>
         <label class="col-md-2">
             Plan:<br/>
-            <input type="text" name="plan" />
+            <select name="plan">
+                <option selected disabled>Seleccionar</option>
+                <option value="1">Básico</option>
+                <option value="2">Medio</option>
+                <option value="3">Completo</option>
+            </select>
         </label>
         <div class="clearfix">
         </div><br/>

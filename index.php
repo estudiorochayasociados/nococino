@@ -106,9 +106,9 @@ endif;
             <h3><b>¿Tenés un restó o negocio de comidas?</b> <i class="em em-pizza"></i></h3><br/>
             <p>Solicitá tu cuenta de vendedor haciendo click en el siguiente link.</p>
             <?php if (empty($_SESSION["usuarios"])): ?>
-                <a href="#" data-toggle="modal" data-target="#register" onclick="Cambb()">SOLICITAR SER VENDEDOR</a>
+                <a href="#" data-toggle="modal" data-target="#register" onclick="Cambb()">Registrá tu comercio</a>
             <?php else: ?>
-                <a href="#" data-toggle="modal" data-target="#vendedor">SOLICITAR SER VENDEDOR</a>
+                <a href="#" data-toggle="modal" data-target="#vendedor">Registrá tu comercio</a>
             <?php endif; ?>
         </div><!-- End container -->
     </div>

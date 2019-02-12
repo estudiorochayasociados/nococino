@@ -15,7 +15,7 @@ class autoload
         define('PAIS', "Argentina");
         define('EMAIL', "web@estudiorochayasoc.com.ar");
         define('PASS_EMAIL', "weAr2010");
-        define('SMTP_EMAIL', "estudiorochayasoc.com.ar");
+        define('SMTP_EMAIL', "mail.estudiorochayasoc.com.ar");
         define('DIRECCION', "direccion");
         define('LOGO', URL . "/assets/img/logo.png");
         define('APP_ID_FB', "");
@@ -43,7 +43,7 @@ class autoload
     public static function runAdmin()
     {
         session_start();
-        define('URLSITE',"http://".$_SERVER['HTTP_HOST']."/NoCocino/admin");
+        define('URLSITE',"http://".$_SERVER['HTTP_HOST']."/NoCocino");
         define('URL', "http://".$_SERVER['HTTP_HOST']."/NoCocino/admin");
         require_once "../Clases/Zebra_Image.php";
         spl_autoload_register(

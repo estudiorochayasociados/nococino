@@ -87,6 +87,7 @@ class Banner
             while ($row = mysqli_fetch_assoc($notas)) {
                 $array[] = $row;
             }
+
             return $array;
         }
     }

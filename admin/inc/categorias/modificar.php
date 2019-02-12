@@ -51,12 +51,8 @@ if (isset($_POST["agregar"])) {
             <select name="area">
                 <option value="<?= $data["area"] ?>" selected><?= ucwords($data["area"]) ?></option>
                  <option>---------------</option>
-                <option value="sliders">Sliders</option>
-                <option value="novedades">Novedades</option>
-                <option value="portfolio">Portfolio</option>
-                <option value="servicios">Servicios</option>
-                <option value="galerias">Galerias</option>
                 <option value="productos">Productos</option>
+                <option value="banners">Banners</option>
             </select>
         </label> 
         <div class="clearfix"></div>

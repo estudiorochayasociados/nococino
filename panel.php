@@ -143,11 +143,12 @@ endif; ?>
                         $barrio = $funcion->antihack_mysqli(!empty($_POST["barrioEmpresa"]) ? $_POST["barrioEmpresa"] : $empresaData['barrio']);
                         $direccion = $funcion->antihack_mysqli(!empty($_POST["direccionEmpresa"]) ? $_POST["direccionEmpresa"] : $empresaData['direccion']);
                         $postal = $funcion->antihack_mysqli(!empty($_POST["postalEmpresa"]) ? $_POST["postalEmpresa"] : $empresaData['postal']);
+                        $delivery = $funcion->antihack_mysqli(isset($_POST["deliveryEmpresa"]) ? $_POST["deliveryEmpresa"] : $empresaData['delivery']);
 
                         if ($direccion != $empresaData['direccion'] || $ciudad != $empresaData['ciudad'] || $provincia != $empresaData['provincia']):
                             $ubicacionEmpresa = $direccion . '+' . $ciudad . '+' . $provincia;
                             $ubicacionEmpresa = str_replace("-", "+", $funcion->normalizar_link($ubicacionEmpresa));
-                            var_dump($ubicacionEmpresa);
+
                             $jsonEmpresa = json_decode(file_get_contents('https://geocoder.api.here.com/6.2/geocode.json?app_id=Nkd7zJVtg6iaOyaQoEvK&app_code=HTkK8DlaV14bg6RDCA-pQA&searchtext=' . $ubicacionEmpresa));
                             $empresaLongitud = $jsonEmpresa->Response->View[0]->Result[0]->Location->DisplayPosition->Longitude;
                             $empresaLatitud = $jsonEmpresa->Response->View[0]->Result[0]->Location->DisplayPosition->Latitude;
@@ -169,9 +170,10 @@ endif; ?>
                         $empresa->set("barrio", $barrio);
                         $empresa->set("direccion", $direccion);
                         $empresa->set("postal", $postal);
+                        $empresa->set("delivery", $delivery);
                         $empresa->set("coordenadas", $coordenadas);
 
-                        if (!$_POST["enviosEmpresa1"]) {
+                        if ($_POST["enviosEmpresa1"]) {
                             $envio->set("cod_empresa", $empresaData['cod']);
                             $envio->delete();
                             for ($i = 0; $i < count($_POST["enviosEmpresa1"]); $i++) {
@@ -383,8 +385,17 @@ endif; ?>
                     </div>
                     <div class="hidden-plan1 hidden-plan2 wrapper_indent" id="enviosEmpresa" style="display: none;">
                         <form method="post">
-                            <h2 class="inner">Envíos</h2>
                             <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <h4>¿Cuentan con delivery?</h4>
+                                        <select name="deliveryEmpresa" class="form-control">
+                                            <option selected disabled>Seleccionar</option>
+                                            <option value="1" <?php if($empresaData['delivery'] == 1){echo 'selected';} ?>>Si</option>
+                                            <option value="0" <?php if($empresaData['delivery'] == 0){echo 'selected';} ?>>No</option>
+                                        </select>
+                                    </div>
+                                </div><div class="clearfix"></div>
                                 <?php foreach ($enviosArray as $key => $value) { ?>
                                     <div class="col-sm-6">
                                         <div class="form-group">
@@ -717,8 +728,8 @@ endif; ?>
                     $direccion = $funcion->antihack_mysqli(!empty($_POST["direccionPerfil"]) ? $_POST["direccionPerfil"] : $usuarioData['direccion']);
                     $telefono = $funcion->antihack_mysqli(!empty($_POST["telefonoPerfil"]) ? $_POST["telefonoPerfil"] : $usuarioData['telefono']);
                     $postal = $funcion->antihack_mysqli(!empty($_POST["postalPerfil"]) ? $_POST["postalPerfil"] : $usuarioData['postal']);
-                    $plan = $usuarioData['plan']);
-                    $vendedor = $usuarioData['vendedor']);
+                    $plan = $usuarioData['plan'];
+                    $vendedor = $usuarioData['vendedor'];
                     if (!empty($_POST["new_passwordPerfil"]) && !empty($_POST["new_password2Perfil"]) && !empty($_POST["old_passwordPerfil"])):
                         if ($_POST["old_passwordPerfil"] == $usuarioData['password']):
                             if ($_POST["new_passwordPerfil"] == $_POST["new_password2Perfil"]):
