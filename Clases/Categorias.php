@@ -91,7 +91,7 @@ class Categorias
 
     function categoriasMasUsadas(){
         $array = array();
-        $sql = "SELECT c.titulo, count(p.categoria) cant FROM categorias c JOIN productos p ON p.categoria = c.cod WHERE p.cod_empresa = '$this->cod_empresa' GROUP BY c.titulo ORDER BY cant DESC LIMIT 3";
+        $sql = "SELECT c.titulo, count(p.categoria) cant FROM categorias c JOIN productos p ON p.categoria = c.cod WHERE p.cod_empresa = '$this->cod_empresa' GROUP BY c.titulo ORDER BY cant DESC";
         $notas = $this->con->sqlReturn($sql);
         if ($notas) {
             while ($row = mysqli_fetch_assoc($notas)) {

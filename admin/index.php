@@ -9,7 +9,7 @@ $template->set("keywords", "Inicio");
 $template->set("favicon", "url");
 $template->themeInit();
 $admin    = new Clases\Admin();
-$funciones= new Clases\PublicFunction();
+$funciones = new Clases\PublicFunction();
 
 
 if (!isset($_SESSION["admin"])) {

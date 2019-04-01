@@ -29,6 +29,7 @@ class Empresas
     public $cod_usuario;
     public $tiempoEntrega;
     public $delivery;
+    public $horarios;
     private $con;
 
 
@@ -50,7 +51,7 @@ class Empresas
 
     public function add()
     {
-        $sql   = "INSERT INTO `empresas`(`cod`, `titulo`, `telefono`, `email`, `provincia`, `ciudad`, `barrio`, `direccion`, `postal`, `coordenadas`, `desarrollo`, `redes`, `logo`, `portada`, `categoria`, `subcategoria`, `keywords`, `description`, `fecha`, `cod_usuario`, `tiempoEntrega`, `delivery`) VALUES ('{$this->cod}', '{$this->titulo}', '{$this->telefono}', '{$this->email}', '{$this->provincia}', '{$this->ciudad}', '{$this->barrio}', '{$this->direccion}', '{$this->postal}', '{$this->coordenadas}', '{$this->desarrollo}', '{$this->redes}','{$this->logo}','{$this->portada}', '{$this->categoria}', '{$this->subcategoria}', '{$this->keywords}', '{$this->description}', '{$this->fecha}', '{$this->cod_usuario}', '{$this->tiempoEntrega}', '{$this->delivery}')";
+        $sql   = "INSERT INTO `empresas`(`cod`, `titulo`, `telefono`, `email`, `provincia`, `ciudad`, `barrio`, `direccion`, `postal`, `coordenadas`, `desarrollo`, `redes`, `logo`, `portada`, `categoria`, `subcategoria`, `keywords`, `description`, `fecha`, `cod_usuario`, `tiempoEntrega`, `delivery`, `horarios`) VALUES ('{$this->cod}', '{$this->titulo}', '{$this->telefono}', '{$this->email}', '{$this->provincia}', '{$this->ciudad}', '{$this->barrio}', '{$this->direccion}', '{$this->postal}', '{$this->coordenadas}', '{$this->desarrollo}', '{$this->redes}','{$this->logo}','{$this->portada}', '{$this->categoria}', '{$this->subcategoria}', '{$this->keywords}', '{$this->description}', '{$this->fecha}', '{$this->cod_usuario}', '{$this->tiempoEntrega}', '{$this->delivery}', '{$this->horarios}')";
         $query = $this->con->sql($sql);
         return $query;
     }
@@ -78,7 +79,8 @@ class Empresas
         `description` = '{$this->description}',
         `fecha` = '{$this->fecha}',
         `tiempoEntrega` = '{$this->tiempoEntrega}',
-        `delivery` = '{$this->delivery}'
+        `delivery` = '{$this->delivery}',
+        `horarios` = '{$this->horarios}'
         WHERE `id`='{$this->id}'";
         $query = $this->con->sql($sql);
         return $query;

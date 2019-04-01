@@ -22,10 +22,10 @@ $cod = isset($_GET["id"]) ? $_GET["id"] : '';
 $empresa->set("cod", $cod);
 $empresaData = $empresa->view();
 
-if(!isset($_SESSION["detectar_carrito"])){
+if (!isset($_SESSION["detectar_carrito"])) {
     $_SESSION["detectar_carrito"] = '';
 }
-if($_SESSION["detectar_carrito"] != '' && $_SESSION["detectar_carrito"] != $empresaData['cod']){
+if ($_SESSION["detectar_carrito"] != '' && $_SESSION["detectar_carrito"] != $empresaData['cod']) {
     $_SESSION["detectar_carrito"] = '';
     $carrito->destroy();
 }
@@ -40,6 +40,7 @@ $filterProductosSecciones = array("cod_empresa = '$cod' GROUP BY seccion");
 $productosArraySecciones = $productos->list($filterProductosSecciones, "", "");
 
 $carro = $carrito->return();
+
 $carroEnvio = $carrito->checkEnvio();
 $countCarrito = count($carro);
 
@@ -55,7 +56,7 @@ if ($usuarioJefeData['plan'] == 2) {
 } else {
     $colmid = "col-md-6";
 }
-
+$horariosArray = unserialize($empresaData["horarios"]);
 ?>
 
 <!-- SubHeader =============================================== -->
@@ -63,27 +64,35 @@ if ($usuarioJefeData['plan'] == 2) {
 <?php
 if ($empresaData['portada'] == '') {
 ?>
-<section class="parallax-window" id="short" data-parallax="scroll" data-image-src="<?= URL ?>/assets/img/bkg.jpg" data-natural-width="1920">
+<section class="parallax-window" id="short" data-parallax="scroll" data-image-src="<?= URL ?>/assets/img/bkg.jpg"
+         data-natural-width="1920">
     <?php
     } else {
     ?>
-    <section class="parallax-window" data-parallax="scroll" data-image-src="<?= URL ?>/<?= $empresaData['portada'] ?>" data-natural-width="1920">
+    <section class="parallax-window" data-parallax="scroll" data-image-src="<?= URL ?>/<?= $empresaData['portada'] ?>"
+             data-natural-width="1920">
         <?php
         }
         ?>
         <div id="subheader">
             <div id="sub_content">
-                <div id="thumb"><img src="<?= URL ?>/<?= $empresaData['logo'] ?>" alt=""></div>
+                <?php if (!$empresaData['logo']) {
+                    $logo = '/assets/img/logo.png';
+                } else {
+                    $logo = $empresaData['logo'];
+                } ?>
+                <div id="thumb"><img src="<?= URL ?>/<?= $logo ?>" alt=""></div>
                 <h1><?= ucwords($empresaData['titulo']) ?></h1>
                 <div class="text-uppercase"><em>
-                        <?php foreach ($productosArrayCategoria as $key => $value):
+                        <?php 
+                        foreach ($productosArrayCategoria as $key => $value) {
                             $categorias->set("cod", $value['categoria']);
                             $categoriaData = $categorias->view();
                             echo $categoriaData['titulo'] . ' / ';
-                        endforeach; ?>
+                        }
+                         ?>
                     </em></div>
-                <div class="text-uppercase"><i class="icon_pin"></i> <?= $empresaData['direccion'] ?>, <?= $empresaData['ciudad'] ?>
-                    , <?= $empresaData['provincia'] ?></div>
+                <div class="text-uppercase"><i class="icon_pin"></i> <?= $empresaData['direccion'] ?>, <?= $empresaData['ciudad'] ?>, <?= $empresaData['provincia'] ?></div>
             </div><!-- End sub_content -->
         </div><!-- End subheader -->
     </section><!-- End section -->
@@ -111,7 +120,9 @@ if ($empresaData['portada'] == '') {
                                 <div class="single-item-area">
                                     <div class="img-box-area">
                                         <figure>
-                                            <a href="<?= URL ?>/<?= $valor['ruta'] ?>" data-lightbox="<?= $valor['cod'] ?>" data-title="<?= $empresaData['titulo']; ?>">
+                                            <a href="<?= URL ?>/<?= $valor['ruta'] ?>"
+                                               data-lightbox="<?= $valor['cod'] ?>"
+                                               data-title="<?= $empresaData['titulo']; ?>">
                                                 <div style="background: url(<?= URL ?>/<?= $valor['ruta'] ?>)center/cover; width:200px; height:200px;"></div>
                                             </a>
                                         </figure>
@@ -121,38 +132,86 @@ if ($empresaData['portada'] == '') {
                         </div>
                     </div>
                 </section>
-                <?= $empresaData['desarrollo']; ?><br><br>
+                <?= ($empresaData['desarrollo']); ?>
+                <br><br>
             </div>
 
             <div class="col-md-3">
-                <p><a href="#" class="btn_side">Carta</a></p>
+                <p><a href="#" class="btn_side" style="pointer-events: none;">Carta</a></p>
                 <div class="box_style_1">
                     <?php $i = 0;
-                    foreach ($productosArraySecciones as $key => $value):
+                    foreach ($productosArraySecciones as $key => $value) {
                         $secciones->set("cod", $value['seccion']);
                         $seccionData = $secciones->view();
+                        if($seccionData['titulo'] != '') {                        
                         if ($i != 0) {
                             echo '<hr>';
                         }
                         $i++;
                         if ($value['seccion'] == "sin-clasificar") { ?>
-                            <a href="#sin-clasificar"><h5>Sin clasificar<i class="icon-angle-down pull-right"></i></h5></a>
-                        <?php } else { ?>
-                            <a href="#<?= $value['seccion'] ?>"><h5><?= $seccionData['titulo'] ?><i class="icon-angle-down pull-right"></i></h5></a>
-                        <?php } endforeach; ?>
+                                <a href="#sin-clasificar"><h5>Sin clasificar<i class="icon-angle-down pull-right"></i></h5></a>
+                            <?php 
+                            } else {
+                            ?>
+                                <a href="javascript:" onclick="carta('<?= $value['seccion'] ?>')"><h5><?= $seccionData['titulo'] ?><i class="icon-angle-down pull-right"></i></h5></a>
+                            <?php 
+                        } 
+                        }
+                    }
+                        ?>
                 </div>
 
-                <p><a href="#" class="btn_side">Información</a></p>
+                <p><a href="#" class="btn_side" style="pointer-events: none;">Información</a></p>
                 <div class="box_style_1">
                     <h5><?= $empresaData['telefono'] ?><i class="icon-phone-1 pull-right"></i></h5>
                     <hr>
                     <h5><?= $empresaData['direccion'] ?><i class="icon-location-2 pull-right"></i></h5>
                 </div>
 
+                <p><a href="#" class="btn_side" style="pointer-events: none;">Horarios</a></p>
+                <div class="box_style_1 pt-20 pb-20">
+                    <?php if (!empty($horariosArray)) {
+                        foreach ($horariosArray as $key => $item) {
+                            $mananaCount = count(array_filter($item["Manana"]));
+                            $tardeCount = count(array_filter($item["Tarde"]));
+                            if ($mananaCount == 1 && !empty($item["Manana"][0])) {
+                                $horarioManana = $item["Manana"][0] . ' <i class="icon-clock-5"></i>';
+                            } elseif ($mananaCount == 1 && !empty($item["Manana"][1])) {
+                                $horarioManana = '';
+                            } elseif ($mananaCount == 2) {
+                                $horarioManana = $item["Manana"][0] . ' - ' . $item["Manana"][1] . ' <i class="icon-clock-5"></i>';
+                            } elseif ($mananaCount == 0) {
+                                $horarioManana = '';
+                            }
+                            if ($tardeCount == 1 && !empty($item["Tarde"][0])) {
+                                $horarioTarde = $item["Tarde"][0] . ' <i class="icon-clock-5"></i>';
+                            } elseif ($tardeCount == 1 && !empty($item["Tarde"][1])) {
+                                $horarioTarde = '';
+                            } elseif ($tardeCount == 2) {
+                                $horarioTarde = $item["Tarde"][0] . ' - ' . $item["Tarde"][1] . ' <i class="icon-clock-5"></i>';
+                            } elseif ($tardeCount == 0) {
+                                $horarioTarde = '';
+                            }
+                            if ($mananaCount == 0 && $tardeCount == 0) {
+                                $horarioManana = '<i>Sin definir</i>';
+                                $horarioTarde = '';
+                            }
+                            echo '<div class="col-md-4"><b>' . $key . '</b></div><div class="col-md-7 text-right">' . $horarioManana . '<br/>'. $horarioTarde .'</div>';
+                            echo '<div class="clearfix"></div>';
+                            if ($key != 'Domingo') {
+                                echo '<hr>';
+                            }
+                            unset($mananaCount);
+                            unset($tardeCount);
+                        }
+                    } else {
+                        echo '<h5>Horarios sin definir <i class="icon-clock-5"></i></h5>';
+                    } ?>
+                </div>
+
             </div><!-- End col-md-3 -->
 
             <?php
-            //$carrito->destroy();
             if (isset($_POST["enviarCarrito"])) {
                 $_SESSION["detectar_carrito"] = $empresaData['cod'];
 
@@ -187,13 +246,11 @@ if ($empresaData['portada'] == '') {
                 $funcion->headerMove(CANONICAL);
             }
 
-            //$carrito->destroy();
             if (isset($_POST["tipoEnvio"])) {
                 $_SESSION["detectar_carrito"] = $empresaData['cod'];
 
-                if ($carroEnvio != '' || $carroEnvio == 0) {
-                    $carrito->delete($carroEnvio);
-                }
+
+                $carrito->delete($carroEnvio);
 
                 $tipoEnvio = $funcion->antihack_mysqli(isset($_POST['tipoEnvio']) ? $_POST['tipoEnvio'] : '');
                 $envio->set("cod", $tipoEnvio);
@@ -206,13 +263,20 @@ if ($empresaData['portada'] == '') {
                 $carrito->set("precioAdicional", 0);
                 $carrito->set("opciones", '');
                 $carrito->add();
+                $carro = $carrito->return();
+
                 $funcion->headerMove(CANONICAL);
             }
+            //$carrito->destroy();
             ?>
             <div class="<?= $colmid ?>">
                 <div class="box_style_2" id="main_menu">
                     <h2 class="inner">Menús</h2>
-                    <?php foreach ($productosArraySecciones as $keyS => $valueS):
+                    <?php
+                    if (!$productosArraySecciones) {
+                        echo '<h4 class="nomargin_top" id="">Aún no se ha cargado el menú <i class="icon-food"></i></h4>';
+                    }
+                    foreach ($productosArraySecciones as $keyS => $valueS):
                         $secciones->set("cod", $valueS['seccion']);
                         $seccionData = $secciones->view();
                         if ($valueS['seccion'] == 'sin-clasificar') { ?>
@@ -233,55 +297,141 @@ if ($empresaData['portada'] == '') {
                                 $imagen->set("cod", $value['cod']);
                                 $imagenData = $imagen->view(); ?>
                                 <tr>
-                                    <td width="50%">
-                                        <figure class="thumb_menu_list"><img src="<?= URL ?>/<?= $imagenData['ruta'] ?>"
-                                                                             alt="thumb"></figure>
-                                        <h5><?= $value['titulo'] ?></h5>
+                                    <td>
+                                        <figure class="thumb_menu_list">
+                                            <a href="<?= URL ?>/<?= $imagenData['ruta'] ?>"
+                                               data-lightbox="<?= $valueS['cod'] ?>"
+                                               data-title="<?= $empresaData['titulo']; ?>">
+                                                <img src="<?= URL ?>/<?= $imagenData['ruta'] ?>" alt="thumb">
+                                            </a>
+                                        </figure>
+                                        <h5 class="mt-0"><?= $value['titulo'] ?></h5>
                                         <p><?= $value['desarrollo'] ?></p>
+                                        <div class="dev_precio">
+                                            <div class="h35 restaurantes-plan<?= $usuarioJefeData['plan'] ?>">
+                                                <strong class="font20">$
+                                                    <?php if ($value['precio'] == 0 || $value['precio'] == '') {
+                                                        $precio = 'Precio a consultar';
+                                                    } else {
+                                                        $precio = $value['precio'];
+                                                    } ?>
+                                                    <?= $precio ?>
+                                                </strong>
+                                            </div>
+                                            <div class="c_restaurante-plan<?= $usuarioJefeData['plan'] ?>">
+                                                <div class="dropdown dropdown-options">
+                                                    <?php if ($valueS['stock'] > 0 && $value['precio'] > 0) { ?>
+                                                        <a href="#" class="btn btn-info dropdown-toggle" data-toggle="dropdown"
+                                                           aria-expanded="true"><span>Agregar a la compra </span><i
+                                                                    class="icon_plus_alt2"></i></a>
+                                                    <?php } else { ?>
+                                                        <br><span class="alert alert-danger"><b>Sin stock</b></span>
+                                                        <div class="clearfix"></div><br>
+                                                    <?php } ?>
+
+                                                    <div class="dropdown-menu" >
+                                                        <form method="post">
+                                                            <input name="cod" type="hidden" value="<?= $value['cod'] ?>">
+                                                            <input name="titulo" type="hidden" value="<?= $value['titulo'] ?>">
+                                                            <input name="precio" type="hidden" value="<?= $value['precio'] ?>">
+                                                            <?php if (!empty($variantesMostrar)): ?>
+                                                                <h5>Variantes</h5>
+                                                                <?php foreach ($variantesMostrar as $key => $valueV1):
+                                                                    $valor = explode(",", $valueV1); ?>
+                                                                    <label>
+                                                                        <input type="radio"
+                                                                               value="<?= $valor[0] ?>,<?= $valor[1] ?>"
+                                                                               name="variantesPOST"><?= $valor[1] ?>
+                                                                        <span>+ $<?= $valor[0] ?></span>
+                                                                    </label>
+                                                                <?php endforeach;
+                                                            endif;
+                                                            if (!empty($adicionalesMostrar)): ?>
+                                                                <h5>Adicionales</h5>
+                                                                <?php foreach ($adicionalesMostrar as $key => $valueA1):
+                                                                    $valor = explode(",", $valueA1); ?>
+                                                                    <label>
+                                                                        <input type="checkbox"
+                                                                               value="<?= $valor[0] ?>,<?= $valor[1] ?>"
+                                                                               name="adicionalesPOST[]"><?= $valor[1] ?>
+                                                                        <span>+ $<?= $valor[0] ?></span>
+                                                                    </label>
+                                                                <?php endforeach;
+                                                            endif; ?>
+                                                            <input class="form-control" name="cantidad" type="number" min="1"
+                                                                   max="<?= $valueS['stock'] ?>" value="1"
+                                                                   oninvalid="this.setCustomValidity('No contamos con esa cantidad')">
+                                                            <br/>
+                                                            <button type="submit" name="enviarCarrito"
+                                                                    class="btn btn-danger">Agregar al carrito
+                                                            </button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </td>
-                                    <td width="25%">
-                                        <strong>$ <?= $value['precio'] ?></strong>
-                                    </td>
-                                    <td class="c_restaurante-plan<?= $usuarioJefeData['plan'] ?> options" width="25%">
-                                        <div class="dropdown dropdown-options">
-                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true"><i
-                                                        class="icon_plus_alt2"></i></a>
-                                            <div class="dropdown-menu">
-                                                <form method="post">
-                                                    <input name="cod" type="hidden" value="<?= $value['cod'] ?>">
-                                                    <input name="titulo" type="hidden" value="<?= $value['titulo'] ?>">
-                                                    <input name="precio" type="hidden" value="<?= $value['precio'] ?>">
-                                                    <?php if (!empty($variantesMostrar)): ?>
-                                                        <h5>Variantes</h5>
-                                                        <?php foreach ($variantesMostrar as $key => $value):
-                                                            $valor = explode(",", $value); ?>
-                                                            <label>
-                                                                <input type="radio"
-                                                                       value="<?= $valor[0] ?>,<?= $valor[1] ?>"
-                                                                       name="variantesPOST"><?= $valor[1] ?>
-                                                                <span>+ $<?= $valor[0] ?></span>
-                                                            </label>
-                                                        <?php endforeach;
-                                                    endif;
-                                                    if (!empty($adicionalesMostrar)): ?>
-                                                        <h5>Adicionales</h5>
-                                                        <?php foreach ($adicionalesMostrar as $key => $value):
-                                                            $valor = explode(",", $value); ?>
-                                                            <label>
-                                                                <input type="checkbox"
-                                                                       value="<?= $valor[0] ?>,<?= $valor[1] ?>"
-                                                                       name="adicionalesPOST[]"><?= $valor[1] ?>
-                                                                <span>+ $<?= $valor[0] ?></span>
-                                                            </label>
-                                                        <?php endforeach;
-                                                    endif; ?>
-                                                    <input class="form-control" name="cantidad" type="number" min="1"
-                                                           max="99"
-                                                           value="1"><br/>
-                                                    <button type="submit" name="enviarCarrito"
-                                                            class="btn btn-danger">Agregar al carrito
-                                                    </button>
-                                                </form>
+                                    <td class="padD esc_precio options"
+                                        width="25%">
+                                        <div class="h35 restaurantes-plan<?= $usuarioJefeData['plan'] ?>">
+                                            <strong>$
+                                                <?php if ($value['precio'] == 0 || $value['precio'] == '') {
+                                                    $precio = 'Precio a consultar';
+                                                } else {
+                                                    $precio = $value['precio'];
+                                                } ?>
+                                                <?= $precio ?>
+                                            </strong>
+                                        </div>
+                                        <div class="c_restaurante-plan<?= $usuarioJefeData['plan'] ?>">
+                                            <div class="dropdown dropdown-options">
+                                                <?php if ($valueS['stock'] > 0 && $value['precio'] > 0) { ?>
+                                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"
+                                                       aria-expanded="true"><i
+                                                                class="icon_plus_alt2"></i></a>
+                                                <?php } else { ?>
+                                                    <br><span class="alert alert-danger"><b>Sin stock</b></span>
+                                                    <div class="clearfix"></div><br>
+                                                <?php } ?>
+
+                                                <div class="dropdown-menu">
+                                                    <form method="post">
+                                                        <input name="cod" type="hidden" value="<?= $value['cod'] ?>">
+                                                        <input name="titulo" type="hidden" value="<?= $value['titulo'] ?>">
+                                                        <input name="precio" type="hidden" value="<?= $value['precio'] ?>">
+                                                        <?php if (!empty($variantesMostrar)): ?>
+                                                            <h5>Variantes</h5>
+                                                            <?php foreach ($variantesMostrar as $key => $valueV2):
+                                                                $valor = explode(",", $valueV2); ?>
+                                                                <label>
+                                                                    <input type="radio"
+                                                                           value="<?= $valor[0] ?>,<?= $valor[1] ?>"
+                                                                           name="variantesPOST"><?= $valor[1] ?>
+                                                                    <span>+ $<?= $valor[0] ?></span>
+                                                                </label>
+                                                            <?php endforeach;
+                                                        endif;
+                                                        if (!empty($adicionalesMostrar)): ?>
+                                                            <h5>Adicionales</h5>
+                                                            <?php foreach ($adicionalesMostrar as $key => $valueA2):
+                                                                $valor = explode(",", $valueA2); ?>
+                                                                <label>
+                                                                    <input type="checkbox"
+                                                                           value="<?= $valor[0] ?>,<?= $valor[1] ?>"
+                                                                           name="adicionalesPOST[]"><?= $valor[1] ?>
+                                                                    <span>+ $<?= $valor[0] ?></span>
+                                                                </label>
+                                                            <?php endforeach;
+                                                        endif; ?>
+                                                        <input class="form-control" name="cantidad" type="number" min="1"
+                                                               max="<?= $valueS['stock'] ?>" value="1"
+                                                               oninvalid="this.setCustomValidity('No contamos con esa cantidad')">
+                                                        <br/>
+                                                        <button type="submit" name="enviarCarrito"
+                                                                class="btn btn-danger">Agregar al carrito
+                                                        </button>
+                                                    </form>
+                                                </div>
                                             </div>
                                         </div>
                                     </td>
@@ -359,7 +509,8 @@ if ($empresaData['portada'] == '') {
                             <div class="row" id="options_2">
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                     <label>Envío</label>
-                                    <select name="tipoEnvio" class="form-control" required onchange="this.form.submit();">
+                                    <select name="tipoEnvio" class="form-control" required
+                                            onchange="this.form.submit();">
                                         <option>Seleccionar envío</option>
                                         <?php foreach ($enviosArray as $key => $value) {
                                             $envioTitulo = $carro[$carroEnvio]["titulo"];
@@ -403,6 +554,25 @@ if ($empresaData['portada'] == '') {
     </div><!-- End container -->
     <!-- End Content =============================================== -->
 
+    <!-- ordenar envio al final -->
+    <?php if (!empty($carro)) {
+        foreach ($carro as $key => $value) {
+            if ($value["id"] == "Envio-Seleccion") {
+                $varEnvio = $carro[$key];
+                $carrito->delete($key);
+            }
+        }
+        if ($varEnvio != NULL) {
+            $carrito->set("id", $varEnvio["id"]);
+            $carrito->set("titulo", $varEnvio["titulo"]);
+            $carrito->set("cantidad", $varEnvio["cantidad"]);
+            $carrito->set("precio", $varEnvio["precio"]);
+            $carrito->set("precioAdicional", $varEnvio["precioAdicional"]);
+            $carrito->set("opciones", $varEnvio["opciones"]);
+            $carrito->add();
+        }
+    } ?>
+
     <?php $template->themeEnd() ?>
 
     <!-- SPECIFIC SCRIPTS -->
@@ -435,4 +605,12 @@ if ($empresaData['portada'] == '') {
         $(document).ready(function () {
             $('.owl-controls').hide();
         });
+    </script>
+
+    <script>
+        function carta(id) {
+            $('html, body').animate({
+                scrollTop: $("#" + id).offset().top - 100
+            }, 1000);
+        }
     </script>

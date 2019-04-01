@@ -1,14 +1,11 @@
 <?php $usuario = new Clases\Usuarios;
- $funcion = new Clases\PublicFunction; ?>
+$funcion = new Clases\PublicFunction;
+$correo = new Clases\Email; ?>
 
 <!-- Start Preload -->
 <div id="preloader">
     <div class="sk-spinner sk-spinner-wave" id="status">
-        <div class="sk-rect1"></div>
-        <div class="sk-rect2"></div>
-        <div class="sk-rect3"></div>
-        <div class="sk-rect4"></div>
-        <div class="sk-rect5"></div>
+        <img src="<?=URL?>/assets/img/loader.gif" width="100%">
     </div>
 </div>
 <!-- End Preload -->
@@ -25,7 +22,7 @@
             </div>
             <nav class="col--md-8 col-sm-8 col-xs-8">
                 <a class="cmn-toggle-switch cmn-toggle-switch__htx open_close mt-20" href="javascript:void(0);"><span>Menu mobile</span></a>
-                <div class="main-menu mt-20">
+                <div class="main-menu mt-20 displayNav">
                     <div id="header_menu">
                         <img src="<?= URL ?>/assets/img/logo.png" width="190" alt="" data-retina="true">
                     </div>
@@ -41,13 +38,13 @@
                                     <?php if ($_SESSION["usuarios"]["vendedor"] == 1): ?>
                                         <li><a href="<?= URL ?>/panel#seccion-1">Empresa</a></li>
                                         <li class="hidden-plan1"><a href="<?= URL ?>/panel#seccion-2">Menús</a></li>
-                                        <li><a href="<?= URL ?>/pedidosEmpresa">Pedidos</a></li>
+                                        <li><a href="<?= URL ?>/panel?op=verPedidosEmpresa">Pedidos</a></li>
                                         <li><a href="<?= URL ?>/panel#seccion-3">Perfil</a></li>
-                                        <li><a href="<?= URL ?>/logout">Salir</a></li>
+                                        <li><a href="<?= URL ?>/panel?op=logout">Salir</a></li>
                                     <?php else: ?>
-                                        <li><a href="<?= URL ?>/pedidosUsuario">Pedidos</a></li>
+                                        <li><a href="<?= URL ?>/panel?op=verPedidosUsuario">Pedidos</a></li>
                                         <li><a href="<?= URL ?>/panel#seccion-3">Perfil</a></li>
-                                        <li><a href="<?= URL ?>/logout">Salir</a></li>
+                                        <li><a href="<?= URL ?>/panel?op=logout">Salir</a></li>
                                     <?php endif; ?>
                                 </ul>
                             </li>
@@ -64,26 +61,51 @@
 
 <!-- Login modal -->
 <?php
-if (isset($_POST["login"])):
-    $email = $funcion->antihack_mysqli(isset($_POST["email"]) ? $_POST["email"] : '');
-    $password = $funcion->antihack_mysqli(isset($_POST["password"]) ? $_POST["password"] : '');
+if (isset($_POST["login"])) {
+    if ($_POST["recuperarPass"]) {
+        $recuperarPass = $funcion->antihack_mysqli(isset($_POST["recuperarPass"]) ? $_POST["recuperarPass"] : '');
+        $cod = substr(md5(uniqid(rand())), 0, 10);
 
-    $usuario->set("email", $email);
-    $usuario->set("password", $password);
+        $usuarioData = $usuario->list(array("email = '".$recuperarPass."'"));
+        $usuario->set("cod",$usuarioData[0]["cod"]);
+        $usuario->editUnico("password",$cod);
 
-    if ($usuario->login() == 0):
+        $mensaje = "Su nueva contraseña es: <b>".$cod."</b><br><br>";
+
+        $correo->set("asunto", "Recuperar Contraseña");
+        $correo->set("receptor", $recuperarPass);
+        $correo->set("emisor", EMAIL);
+        $correo->set("mensaje", $mensaje);
+        $correo->emailEnviar();
         ?>
         <script>
-            $(document).ready(function () {
-                $("#errorLogin").html('<br/><div class="alert alert-warning" role="alert">Email o contraseña incorrecta.</div>');
-                $('#login_2').modal("show");
-            });
+        $(document).ready(function () {
+            $("#errorLogin").html('<br/><div class="alert alert-success" role="alert">Revise su email para ver su nueva contraseña.</div>');
+            $('#login_2').modal("show");
+        });
         </script>
-    <?php
-    else:
-        $funcion->headerMove(URL);
-    endif;
-endif;
+        <?php
+    } else {
+        $email = $funcion->antihack_mysqli(isset($_POST["email"]) ? $_POST["email"] : '');
+        $password = $funcion->antihack_mysqli(isset($_POST["password"]) ? $_POST["password"] : '');
+
+        $usuario->set("email", $email);
+        $usuario->set("password", $password);
+
+        if ($usuario->login() == 0) {
+            ?>
+            <script>
+                $(document).ready(function () {
+                    $("#errorLogin").html('<br/><div class="alert alert-warning" role="alert">Email o contraseña incorrecta.</div>');
+                    $('#login_2').modal("show");
+                });
+            </script>
+            <?php
+        } else {
+            $funcion->headerMove(URL);
+        }
+    }
+}
 ?>
 <div class="modal fade" id="login_2" tabindex="-1" role="dialog" aria-labelledby="myLogin" aria-hidden="true">
     <div class="modal-dialog">
@@ -95,7 +117,8 @@ endif;
                 <input type="email" class="form-control form-white" name="email" placeholder="Email">
                 <input type="password" class="form-control form-white" name="password" placeholder="Contraseña">
                 <div class="text-left">
-                    <a href="#">¿Olvidaste tu contraseña?</a>
+                    <a id="btnPass" href="#">¿Olvidaste tu contraseña?</a>
+                    <div id="recuperarPass"></div>
                 </div>
                 <button type="submit" name="login" class="btn btn-submit">Ingresar</button>
             </form>
@@ -134,6 +157,7 @@ if (isset($_POST["registrar"])):
             </script>
         <?php
         else:
+            $usuario->set("password", $password);
             $usuario->login();
             if ($senalVendedor == 0):
                 $funcion->headerMove(URL);
@@ -170,14 +194,14 @@ endif;
                 <input type="text" class="form-control form-white" name="apellido" placeholder="Apellido" required>
                 <input type="email" class="form-control form-white" name="email" placeholder="Email" required>
                 <p id="senalVendedor"></p>
-                <input type="text" class="form-control form-white" name="password" placeholder="Contraseña"
+                <input type="password" class="form-control form-white" name="password" placeholder="Contraseña"
                        id="password1" required>
-                <input type="text" class="form-control form-white" name="password2" placeholder="Confirmar contraseña"
+                <input type="password" class="form-control form-white" name="password2" placeholder="Confirmar contraseña"
                        id="password2" required>
                 <div class="checkbox-holder text-left">
                     <div class="checkbox">
                         <input type="checkbox" value="1" id="check_2" name="terminos" required>
-                        <label for="check_2"><span>He leído y acepto los <strong>Términos &amp; Condiciones</strong></span></label>
+                        <label for="check_2"><span>He leído y acepto los <a href="<?=URL?>/terminos-y-condiciones.html" target="_blank"><strong>Términos &amp; Condiciones</strong></a></span></label>
                     </div>
                 </div>
                 <button type="submit" name="registrar" class="btn btn-submit">Registrar</button>
@@ -185,3 +209,13 @@ endif;
         </div>
     </div>
 </div><!-- End Register modal -->
+
+<script>
+    $('#btnPass').click(
+        function () {
+            $('#recuperarPass').empty();
+            $('#recuperarPass').append('<input type="email" name="recuperarPass" class="form-control form-white" placeholder="Email">');
+            $('#recuperarPass').append('<button type="submit" name="login" class="btn btn-submit">Recuperar Contraseña</button>');
+        }
+    );
+</script>

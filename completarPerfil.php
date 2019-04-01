@@ -95,9 +95,6 @@ $usuarioData = $usuario->view();
                                         <option value="Córdoba" <?php if ($usuarioData['provincia'] == 'Córdoba') echo 'selected'; ?>>
                                             Córdoba
                                         </option>
-                                        <option value="Buenos Aires" <?php if ($usuarioData['provincia'] == 'Buenos Aires') echo 'selected'; ?>>
-                                            Buenos Aires
-                                        </option>
                                     </select>
                                 </div>
                             </div>
@@ -108,9 +105,6 @@ $usuarioData = $usuario->view();
                                         <option value="" selected disabled>Selecciona tu localidad</option>
                                         <option value="San Francisco" <?php if ($usuarioData['localidad'] == 'San Francisco') echo 'selected'; ?>>
                                             San Francisco
-                                        </option>
-                                        <option value="Gran Buenos Aires Zona Sur" <?php if ($usuarioData['localidad'] == 'Gran Buenos Aires Zona Sur') echo 'selected'; ?>>
-                                            Gran Buenos Aires Zona Sur
                                         </option>
                                     </select>
                                 </div>

@@ -16,7 +16,7 @@ $subpages = ["banners"];
             <ul class="navbar-nav">
                 <li class="nav-item">
                     <a class="nav-link" href="index.php">
-                        Home
+                        Inicio
                     </a>
                 </li>
                 <li class="nav-item dropdown <?php if (!in_array('contenidos', $pages)) {echo 'd-none';}?>">

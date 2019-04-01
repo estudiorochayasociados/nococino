@@ -14,6 +14,7 @@ $carrito = new Clases\Carrito();
 $usuario = new Clases\Usuarios();
 $correo = new Clases\Email();
 $empresa = new Clases\Empresas();
+$producto = new Clases\Productos();
 
 $cod_pedido = $_SESSION["cod_pedido"];
 
@@ -71,6 +72,10 @@ $carroEnvio = $carrito->checkEnvio();
                         $carro__ = '';
                         foreach ($carro as $carroItem):
                             if ($carroItem['id'] !== "Envio-Seleccion"):
+                                $producto->set("cod", $carroItem['id']);
+                                $productoData = $producto->view();
+                                $nuevoStock = $productoData['stock'] - $carroItem['cantidad'];
+                                $producto->editUnico("stock", $nuevoStock);
 
                                 if (!empty($carroItem['opciones'])):
                                     $variantesMostrarCarrito = $carroItem['opciones'][0];
@@ -137,7 +142,7 @@ $carroEnvio = $carrito->checkEnvio();
                             <td>
                                 Envío: <?= $carro[$carroEnvio]["titulo"] ?>
                                 <a href="#" class="tooltip-1" data-placement="top" title=""
-                                   data-original-title="Tiempo estimado: 30 min."><i
+                                   data-original-title="Tiempo estimado: <?= $empresaData['tiempoEntrega'] ?>"><i
                                             class="icon_question_alt"></i></a>
                                 <?php $carro__ .= "<tr style='background: #ccc;'><td><b>Envío:</b> " . $carro[$carroEnvio]["titulo"] . "</td>"; ?>
                             </td>
@@ -263,7 +268,7 @@ $mensaje_carro .= $carro__;
 $mensaje_carro .= '</tbody></table>';
 
 //MENSAJE = DATOS EMPRESA
-$datos_empresa = "<b>Comercio:</b> " .$empresaData['titulo']. "<br/>";
+$datos_empresa = "<b>Comercio:</b> " . $empresaData['titulo'] . "<br/>";
 $datos_empresa .= "<b>Email:</b> " . $empresaData['email'] . "<br/>";
 $datos_empresa .= "<b>Provincia:</b> " . $empresaData['provincia'] . "<br/>";
 $datos_empresa .= "<b>Localidad:</b> " . $empresaData['ciudad'] . "<br/>";
@@ -317,5 +322,6 @@ if (!empty($carro)):
         unset($_SESSION["usuarios"]);
     }
     unset($_SESSION["cod_pedido"]);
+
 endif;
 $template->themeEnd() ?>

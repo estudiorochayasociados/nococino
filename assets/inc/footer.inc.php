@@ -4,11 +4,8 @@
             <div class="col-md-12">
                 <div id="social_footer">
                     <ul>
-                        <li><a href=""><i class="icon-facebook"></i></a></li>
-                        <li><a href=""><i class="icon-twitter"></i></a></li>
-                        <li><a href=""><i class="icon-google"></i></a></li>
-                        <li><a href=""><i class="icon-instagram"></i></a></li>
-                        <li><a href=""><i class="icon-youtube-play"></i></a></li>
+                        <li><a href="https://www.facebook.com/Nococinoarg/"><i class="icon-facebook"></i></a></li> 
+                        <li><a href="https://www.instagram.com/nococinoarg/?hl=es-la"><i class="icon-instagram"></i></a></li> 
                     </ul>
                     <p>
                         © Desarrollado por Estudio Rocha & Asociados - Derechos Reservados por <b><?=TITULO?></b> 2019
@@ -24,7 +21,7 @@
 <script src="<?= URL ?>/assets/js/common_scripts_min.js"></script>
 <script src="<?= URL ?>/assets/js/functions.js"></script>
 <script src="<?= URL ?>/assets/js/validate.js"></script>
-<script src="<?= URL ?>/assets/lightbox/lightbox.js"></script>
+<script src="<?= URL ?>/assets/lightbox/js/lightbox.min.js"></script>
 
 
 <script>

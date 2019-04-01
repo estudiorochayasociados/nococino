@@ -39,20 +39,11 @@ if (isset($_POST["agregar"])) {
         $prefijo   = substr(md5(uniqid(rand())), 0, 10);
         if ($dominio != '') {
             $destinoFinal     = "../assets/archivos/" . $prefijo . "." . $dominio;
+            var_dump($destinoFinal);
+            var_dump($tucadena);
             move_uploaded_file($imgInicio, $destinoFinal);
             chmod($destinoFinal, 0777);
-            $destinoRecortado = "../assets/archivos/banner/" . $prefijo . "." . $dominio;
-
-            $zebra->source_path = $destinoFinal;
-            $zebra->target_path = $destinoRecortado;
-            $zebra->jpeg_quality = 80;
-            $zebra->preserve_aspect_ratio = true;
-            $zebra->enlarge_smaller_images = true;
-            $zebra->preserve_time = true;
-
-            if ($zebra->resize(0, 0, ZEBRA_IMAGE_NOT_BOXED)) {
-                unlink($destinoFinal);
-            }
+            $destinoRecortado = "../assets/archivos/" . $prefijo . "." . $dominio;
 
             $imagenes->set("cod", $cod);
             $imagenes->set("ruta", str_replace("../", "", $destinoRecortado));

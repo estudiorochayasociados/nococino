@@ -16,7 +16,7 @@ $funcion = new Clases\PublicFunction();
                 </thead>
                 <tbody>
                 <?php
-                $filter = array();
+                $filter = array(); 
                 $data = $empresas->list("", "", "");
                 if (is_array($data)) {
                     for ($i = 0; $i < count($data); $i++) {
@@ -27,9 +27,9 @@ $funcion = new Clases\PublicFunction();
                         echo "<tr>";
                         echo "<td>" . strtoupper($data[$i]["titulo"]) . "</td>";
                         echo "<td>";
-                        echo '<form target="_blank" method="post" action="' . URLSITE . '/loginEmpresa.php" style="float: left;">';
+                        echo '<form target="_blank" method="post" action="' . URLSITE . '/panel?op=loginEmpresa" style="float: left;">';
                         echo '<input name="email" type="hidden" value="'.$email.'" />';
-                        echo '<input name="password" type="hidden" value="'.$password.'" />';
+                        echo '<input name="password" type="hidden" value="'. $password.'" />';
                         echo '<button class="btn btn-info" type="submit" > <i class="fa fa-cog" ></i ></button >';
                         echo '</form>';
                         echo '<a class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="Eliminar" href="' . URL . '/index.php?op=empresas&accion=ver&borrar=' . $data[$i]["cod"] . '">

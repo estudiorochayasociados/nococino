@@ -7,9 +7,6 @@ RewriteRule ^(.*)$ $1.php
 
 RewriteRule ^menu/(.*)/(.*)$ ./menu.php?id=$2
 RewriteRule ^inicio ./index.php
-RewriteRule ^modificar-menu/(.*)/(.*)$ ./modificar_menu.php?id=$2
-RewriteRule ^crear-menu ./crear_menu.php
-RewriteRule ^crear-empresa ./crear_empresa.php
 RewriteRule ^restaurante/(.*)/(.*)$ ./restaurante.php?id=$2
 RewriteRule ^c/(.*)/(.*)$ ./contenidos.php?id=$2
 

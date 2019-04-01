@@ -45,8 +45,56 @@ Author URI: http://themeforest.net/user/Ansonika/
 /*============================================================================================*/
 /* 1.  SITE STRUCTURE and TYPOGRAPHY */
 /*============================================================================================*/
+.h35{
+    height: 35px;
+}
 
+.dev_precio{
+    display: none;
+}
+
+.esc_precio{
+    display: table-cell;
+}
+
+.font20{
+    font-size: 20px;
+}
+
+@media only screen and (max-width: 991px) {
+    .displayNav{
+        display: none;
+    }
+    .thumb_menu_list{
+        width: 100% !important;
+        max-height: none !important;
+    }
+    .dev_precio{
+        display: block;
+    }
+    .esc_precio{
+        display: none;
+    }
+}
 /*----------------------- SLIDER RESTAURANTE ---------------------------------*/
+
+
+/* ----- ANUNCIOS ------ */
+.ban_superior img{
+    max-height: 200px;
+}
+
+.ban_mobile_superior img{
+    max-height: 150px;
+}
+
+.ban_intercalado img{
+    max-height: 150px;
+}
+
+.ban_mobile_inferior img{
+    max-height: 150px;
+}
 
 /*-------------PLANES-----------*/
 .restaurantes-plan1 {
@@ -61,7 +109,15 @@ Author URI: http://themeforest.net/user/Ansonika/
     display: none !important;
 }
 
+.b_restaurante-plan1 {
+    display: none !important;
+}
+
 .c_restaurante-plan2 {
+    display: none !important;
+}
+
+.c_restaurante-plan1 {
     display: none !important;
 }
 
@@ -1360,7 +1416,9 @@ a.strip_list:hover h3 {
     background: #fff;
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
+    text-transform: uppercase;
     border-radius: 3px;
+    font-size:12px !important;
     border: 1px solid #ededed;
     margin-bottom: 30px;
 }
@@ -1531,7 +1589,6 @@ ul#cat_nav li a:hover, ul#cat_nav li a.active {
     box-sizing: border-box;
     margin: auto;
     margin-bottom: 15px;
-    background-color: #fff;
 }
 
 #sub_content #thumb img {
@@ -1920,19 +1977,25 @@ ul.opening_list li span {
     width: 100%;
     height: 100%;
     bottom: 0;
-    background-color: #8BA14F;
+    background-color: #ffffffbf;
     z-index: 999999;
 }
 
 .sk-spinner-wave.sk-spinner {
-    margin: -15px 0 0 -25px;
+    margin: -30px 0 0 -50px;
     position: absolute;
     left: 50%;
-    top: 50%;
-    width: 50px;
-    height: 30px;
+    top: 42.5%;
+    width: 150px;
+    height: 30px;;
     text-align: center;
     font-size: 10px;
+}
+
+@media only screen and (max-width: 399px) {
+    .sk-spinner-wave.sk-spinner {
+        left: 44%;
+    }
 }
 
 .sk-spinner-wave div {
@@ -3177,10 +3240,14 @@ a.btn_filter#search_bt:before {
     cursor: pointer;
 }
 
+.padD{
+    padding: 8px 0 8px 0 !important;
+}
+
 /*4.6 Restaurant menu  */
 .thumb_menu_list {
-    width: 60px;
-    height: 60px;
+    width: 100px;
+    max-height: 100px;
     overflow: hidden;
     text-align: center;
     display: inline-block;
@@ -3191,7 +3258,7 @@ a.btn_filter#search_bt:before {
 }
 
 .thumb_menu_list img {
-    width: 60px;
+    width: 100%;
     height: auto;
 }
 
@@ -3208,6 +3275,12 @@ a.btn_filter#search_bt:before {
     text-transform: none !important;
     border-top: 2px solid #ec008c;
     margin-left: -86px;
+}
+
+@media only screen and (max-width: 991px) {
+    .dropdown-options .dropdown-menu {
+        margin-left: -15px;
+    }
 }
 
 .dropdown-options .dropdown-menu:before {

@@ -41,7 +41,6 @@ endif;
                                 <select class="form-control" name="ciudad" id="ciudad" required>
                                     <option value="" selected disabled>Seleccioná tu Ciudad</option>
                                     <option value="San Francisco">San Francisco</option>
-                                    <option value="Gran Buenos Aires Zona Sur">Gran Buenos Aires Zona Sur</option>
                                 </select>
                             </div>
                         </div>
@@ -151,14 +150,12 @@ endif;
                                 <option value="" selected disabled>Provincia</option>
                                 <?php// $funcion->provincias() ?>
                                 <option value="Córdoba" >Córdoba</option>
-                                <option value="Buenos Aires" >Buenos Aires</option>
                             </select>
                         </label>
                         <label class="col-md-6 col-xs-6">
                             <select class="form-control" name="localidadVendedor" <!--id="localidad"--> required>
                                 <option value="" selected disabled>Localidad</option>
                                 <option value="San Francisco">San Francisco</option>
-                                <option value="Gran Buenos Aires Zona Sur">Gran Buenos Aires Zona Sur</option>
                             </select>
                         </label>
                     </div>

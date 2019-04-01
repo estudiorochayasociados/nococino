@@ -157,7 +157,7 @@ $numeroPaginas = $empresa->paginador($filterEmpresa, $cantidad);
     shuffle($banSuperior);
     $imagenesBanners->set("cod", $banSuperior[0]["cod"]);
     $imagenesBannersData = $imagenesBanners->view();
-    echo '<img width="100%" src="' . $imagenesBannersData['ruta'] . '" /><br/><br/>';
+    echo '<a class="ban_superior" href="' . $banSuperior[0]['link'] . '" target="_blank"><img width="100%" src="' . $imagenesBannersData['ruta'] . '" /></a><br/><br/>';
     ?>
 </div>
 <!-- banner mobile superior -->
@@ -166,7 +166,7 @@ $numeroPaginas = $empresa->paginador($filterEmpresa, $cantidad);
     shuffle($banMobileSup);
     $imagenesBanners->set("cod", $banMobileSup[0]["cod"]);
     $imagenesBannersData = $imagenesBanners->view();
-    echo '<img width="100%" src="' . $imagenesBannersData['ruta'] . '" /><br/><br/>';
+    echo '<a class="ban_mobile_superior" href="' . $banMobileSup[0]['link'] . '" target="_blank"><img width="100%" src="' . $imagenesBannersData['ruta'] . '" /></a><br/><br/>';
     ?>
 </div>
 
@@ -293,32 +293,53 @@ $numeroPaginas = $empresa->paginador($filterEmpresa, $cantidad);
                 for ($i = 0; $i < 2; $i++) {
                     $imagenesBanners->set("cod", $banFiltro[$i]["cod"]);
                     $imagenesBannersData = $imagenesBanners->view();
-                    echo '<img width="100%" src="' . $imagenesBannersData['ruta'] . '" /><br/><br/>';
+                    echo '<a href="' . $banFiltro[$i]['link'] . '" target="_blank"><img width="100%" src="' . $imagenesBannersData['ruta'] . '" /></a><br/><br/>';
                 } ?>
             </div>
         </div><!--End col-md -->
 
         <div class="col-md-9">
 
-            <?php $i = 0;
+            <?php
+            if ($ubicacionUsuario != '') {
+                $distanciaArray = array();
+                foreach ($empresaArray as $key => $value) {
+                    if($value['coordenadas'] != ''){
+                        $coordenadas = explode(',', $value['coordenadas']);
+                        $jsonDistancia = json_decode(file_get_contents('https://route.api.here.com/routing/7.2/calculateroute.json?app_id=Nkd7zJVtg6iaOyaQoEvK&app_code=HTkK8DlaV14bg6RDCA-pQA&waypoint0=geo!' . $usuarioLatitud . ',' . $usuarioLongitud . '&waypoint1=geo!' . $coordenadas[0] . ',' . $coordenadas[1] . '&mode=shortest;pedestrian'));
+                        $distanciaActual = $jsonDistancia->response->route[0]->summary->distance;
+                        $distanciaArray[$value['cod']] = $distanciaActual;
+                    }else{
+                        $distanciaArray[$value['cod']] = 9999999;
+                    }
+                }
+                asort($distanciaArray);
+                $i = 0;
+                foreach ($distanciaArray as $key => $value) {
+                    for ($j = 0; $j < count($empresaArray); $j++) {
+                        if ($key == $empresaArray[$j]['cod']) {
+                            $tempArray = $empresaArray[$j];
+                            $empresaArray[$j] = $empresaArray[$i];
+                            $empresaArray[$i] = $tempArray;
+                        }
+                    }
+                    $i++;
+                }
+            }
+            $i = 0;
             foreach ($empresaArray as $key => $value):
                 echo '<div class="hidden-xs hidden-sm">';
                 if ($i != 0 && $i % 4 == 0) {
                     shuffle($banIntercalado);
                     $imagenesBanners->set("cod", $banIntercalado[0]["cod"]);
                     $imagenesBannersData = $imagenesBanners->view();
-                    echo '<img width="100%" src="' . $imagenesBannersData['ruta'] . '" /><br/><br/>';
+                    echo '<a class="ban_intercalado" href="' . $banIntercalado[0]['link'] . '" target="_blank"><img width="100%" src="' . $imagenesBannersData['ruta'] . '" /></a><br/><br/>';
                 }
                 echo '</div>';
                 $i++;
                 $usuarioJefe->set("cod", $value['cod_usuario']);
                 $usuarioJefeData = $usuarioJefe->view();
 
-                if ($ubicacionUsuario != ''):
-                    $coordenadas = explode(',', $value['coordenadas']);
-                    $jsonDistancia = json_decode(file_get_contents('https://route.api.here.com/routing/7.2/calculateroute.json?app_id=Nkd7zJVtg6iaOyaQoEvK&app_code=HTkK8DlaV14bg6RDCA-pQA&waypoint0=geo!' . $usuarioLatitud . ',' . $usuarioLongitud . '&waypoint1=geo!' . $coordenadas[0] . ',' . $coordenadas[1] . '&mode=shortest;pedestrian'));
-                    $distancia = $jsonDistancia->response->route[0]->summary->distance;
-                endif;
                 $categorias->set("cod_empresa", $value['cod']);
                 $categoriasMasUsadas = $categorias->categoriasMasUsadas(); ?>
                 <div class="strip_list wow fadeIn" data-wow-delay="0.1s">
@@ -341,12 +362,12 @@ $numeroPaginas = $empresa->paginador($filterEmpresa, $cantidad);
                                         <i class="icon-food"></i>
                                         <?php
                                         if (count($categoriasMasUsadas) == 1) {
-                                            echo $categoriasMasUsadas[0]['titulo'];
+                                            echo mb_strtoupper($categoriasMasUsadas[0]['titulo']);
                                         } else {
                                             $cat_mostrar = '';
-                                            foreach ($categoriasMasUsadas as $keyC => $valueC):
-                                                $cat_mostrar .= $valueC['titulo'] . ' / ';
-                                            endforeach;
+                                            foreach ($categoriasMasUsadas as $keyC => $valueC) {
+                                                $cat_mostrar .= mb_strtoupper($valueC['titulo']) . ' / ';
+                                            }
                                             echo substr($cat_mostrar, 0, -2);
                                         }
                                         ?>
@@ -361,10 +382,10 @@ $numeroPaginas = $empresa->paginador($filterEmpresa, $cantidad);
                                 <div class="location">
                                     <i class="icon-phone"></i> <?= $value['telefono'] ?>
                                 </div>
-                                <?php if ($ubicacionUsuario != ''): ?>
+                                <?php if ($ubicacionUsuario != '' && $value['coordenadas'] != ''): ?>
                                     <div class="mt-5">
                                         <span class="info">Distancia: </span>
-                                        <?= $distancia ?> m
+                                        <?= $distanciaArray[$value['cod']] ?> m
                                     </div>
                                 <?php endif; ?>
                             </div>
@@ -415,7 +436,7 @@ $numeroPaginas = $empresa->paginador($filterEmpresa, $cantidad);
     shuffle($banMobileInf);
     $imagenesBanners->set("cod", $banMobileInf[0]["cod"]);
     $imagenesBannersData = $imagenesBanners->view();
-    echo '<img width="100%" src="' . $imagenesBannersData['ruta'] . '" /><br/><br/>';
+    echo '<a class="ban_mobile_inferior" href="' . $banMobileInf[0]['link'] . '" target="_blank"><img width="100%" src="' . $imagenesBannersData['ruta'] . '" /></a><br/><br/>';
     ?>
 </div>
 
